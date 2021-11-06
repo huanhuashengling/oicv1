@@ -4,7 +4,7 @@ namespace App\Http\Controllers\District;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Student;
+use App\Models\School;
 use App\Models\Teacher;
 use App\Models\Sclass;
 use App\Models\Lesson;
@@ -318,11 +318,11 @@ class HomeController extends Controller
         }
     }
 
-    public function resetStudentPassword(Request $request) {
-        $student = Student::find($request->get('users_id'));
-        if ($student) {
-            $student->password = bcrypt("123456");
-            $student->save();
+    public function resetSchoolPassword(Request $request) {
+        $school = School::find($request->get('users_id'));
+        if ($school) {
+            $school->password = bcrypt("123456");
+            $school->save();
             return "true";
         } else {
             return "false";

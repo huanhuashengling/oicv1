@@ -112,8 +112,8 @@ window.resetActionEvents = {
 	'click .reset': function(e, value, row, index) {
      	$.ajax({
             type: "POST",
-            url: '/district/resetStudentPassword',
-            data: {users_id: row.schoolsId},
+            url: '/district/resetSchoolPassword',
+            data: {users_id: row.id},
             success: function( data ) {
             	if("true" == data) {
             		alert("重置密码成功，已修改为默认密码123456！")

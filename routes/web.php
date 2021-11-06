@@ -250,7 +250,7 @@ Route::group(['middleware' => 'auth.district:district, district/login', 'prefix'
     $router->post('importStudents', 'HomeController@importStudents');
     $router->post('updateStudentEmail', 'HomeController@updateStudentEmail');
     $router->post('getStudentsData', 'HomeController@getStudentsData');
-    $router->post('resetStudentPassword', 'HomeController@resetStudentPassword');
+    $router->post('resetSchoolPassword', 'HomeController@resetSchoolPassword');
     $router->post('lockOneStudentAccount', 'HomeController@lockOneStudentAccount');
     $router->post('unlockOneStudentAccount', 'HomeController@unlockOneStudentAccount');
     $router->post('createOneStudent', 'HomeController@createOneStudent');
