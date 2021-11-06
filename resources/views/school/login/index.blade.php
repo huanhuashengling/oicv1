@@ -9,7 +9,7 @@
                 {{ csrf_field() }}
                 <h1 class="h3 mb-3 fw-normal">校级管理登陆</h1>
                 <div class="form-floating">
-                    <input id="username" type="text" class="form-control" name="username" value="ysadmin" required autofocus>
+                    <input id="username" type="text" class="form-control" name="username" value="yuying3admin" required autofocus>
                     <label for="username" class="col-md-4 control-label">用户名</label>
                     @if ($errors->has('username'))
                         <span class="help-block">
