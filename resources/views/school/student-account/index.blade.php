@@ -6,9 +6,12 @@
 <div class="panel panel-success col-md-6">
   <div class="panel-heading">导入学生账户</div>
   <div class="panel-body">
-    <form method="POST" files="true" action="url(school/importStudents)">
-      <input type="file" class="form-control file-loading" id="import-student-account">
 
+    <form method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+      <div class="file-loading">
+        <input type="file" class="form-control" name="student" id="import-student-account">
+      </div>
     </form>
      <!-- Form::open(array('url'=>'school/importStudents','method'=>'POST','files'=>'true')) 
      Form::file('xls', ['id' => 'import-student-account', 'type'=>"file", 'class'=>"file-loading"]) 

@@ -5,6 +5,7 @@ $(document).ready(function() {
 	  }
 	});
     $("#import-student-account").fileinput({
+        uploadUrl:'/school/importStudents',
 		showPreview: false,
 		language: "zh", 
 		allowedFileExtensions: ["xls", "xlsx", "csv"],

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\School;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
+use App\Imports\StudentsImport;
 use App\Models\Teacher;
 use App\Models\Sclass;
 use App\Models\WorkComment;
@@ -14,6 +15,7 @@ use App\Models\Mark;
 use App\Models\Term;
 use Validator;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Input;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
@@ -46,20 +48,10 @@ class StudentAccountController extends Controller
 
     public function importStudents(Request $request)
     {
-        if($request->hasFile('xls')){
-            $path = $request->file('xls')->getRealPath();
-            $data = Excel::load($path, function($reader) {})->get();
-            if(!empty($data) && $data->count()){
-
-                foreach ($data->toArray() as $value) {
-                    // dd($value);
-
-                    if(!empty($value)){
-                        $this->createStudentAccount($value);
-                        // die();
-                    }
-                }
-            }
+        if(null !== $request->file('student')){
+            // $path = $request->file('student');
+            // dd($path);
+            Excel::import(new StudentsImport, $request->file('student'));
         }
     }
 
@@ -67,7 +59,7 @@ class StudentAccountController extends Controller
     {
         if($request->hasFile('xls')){
             $path = $request->file('xls')->getRealPath();
-            $data = Excel::load($path, function($reader) {})->get();
+            $data = Excel::import($path, function($reader) {})->get();
             if(!empty($data) && $data->count()){
 
                 foreach ($data->toArray() as $value) {
@@ -191,7 +183,7 @@ class StudentAccountController extends Controller
                 'order_in_group' => $data['order_in_group'],
                 'sclasses_id' => $data['sclasses_id'],
                 'is_lock' => 0,
-                'remember_token' => str_random(10),
+                'remember_token' => Str::random(10),
             ]);
         } catch (Exception $e) {
             throw new Exception("Error Processing Request", 1);

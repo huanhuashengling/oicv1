@@ -168,7 +168,7 @@ Route::group(['middleware' => 'auth.school:school, school/login', 'prefix' => 's
 
     //student
     $router->get('students', 'StudentAccountController@index');
-    $router->post('importStudents', 'StudentAccountController@importStudents');
+    $router->post('importStudents', 'StudentAccountController@importStudents')->name('school.importStudents');
     $router->post('updateStudentEmail', 'StudentAccountController@updateStudentEmail');
     $router->post('getStudentsData', 'StudentAccountController@getStudentsData');
     $router->post('resetStudentPassword', 'StudentAccountController@resetStudentPassword');
@@ -248,7 +248,7 @@ Route::group(['middleware' => 'auth.district:district, district/login', 'prefix'
     $router->post('getSchoolsAccountData', 'SchoolController@getSchoolsData');
     $router->post('createOneSchool', 'SchoolController@createOneSchool');
 
-    $router->post('importStudents', 'HomeController@importStudents');
+    // $router->post('importStudents', 'HomeController@importStudents');
     $router->post('updateStudentEmail', 'HomeController@updateStudentEmail');
     $router->post('getStudentsData', 'HomeController@getStudentsData');
     $router->post('resetSchoolPassword', 'HomeController@resetSchoolPassword');
