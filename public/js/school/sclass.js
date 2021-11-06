@@ -75,10 +75,12 @@ $(document).ready(function() {
         },
     });
 
-
-    $("#add-new-btn").click(function(e) {
-        // alert($(this).val());
+    $("#add-new-sclass").click(function(e) {
         $("#add-new-sclass-modal").modal("show");
+    });
+
+    $("#add-new-term").click(function(e) {
+        $("#add-new-term-modal").modal("show");
     });
 
     $("#confirm-add-new-btn").click(function(e) {
@@ -94,7 +96,7 @@ $(document).ready(function() {
             'is_graduated': "0",
             'schools_id': $("#schools-id").val(),
         }
-        console.log(data);
+        // console.log(data);
         $.ajax({
             type: "POST",
             url: '/school/createOneSclass',
@@ -102,6 +104,33 @@ $(document).ready(function() {
             success: function( data ) {
                 $("#add-new-sclass-modal").modal("hide");
                 $('#sclass-list').bootstrapTable('refresh');
+            }
+        });
+    });
+
+    $("#confirm-add-new-term").click(function(e) {
+        if("" == $("#term-enter-school-year").val() || "" == $("#grade-key").val() || "" == $("#term-segment").val())
+        {
+            alert("三项都必填！");
+            return;
+        }
+        data = {
+            'enter_school_year': $("#term-enter-school-year").val(),
+            'grade_key': $("#grade-key").val(),
+            'term_segment': $("#term-segment").val(),
+            'from_date': $("#start-date").val(),
+            'to_date': $("#end-date").val(),
+            'is_current': "0",
+            // 'schools_id': $("#schools-id").val(),
+        }
+        // console.log(data);
+        $.ajax({
+            type: "POST",
+            url: '/school/createOneTerm',
+            data: data,
+            success: function( data ) {
+                $("#add-new-term-modal").modal("hide");
+                $('#term-list').bootstrapTable('refresh');
             }
         });
         // console.log($("#student-name").val());

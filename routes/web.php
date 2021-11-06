@@ -164,6 +164,7 @@ Route::group(['middleware' => 'auth.school:school, school/login', 'prefix' => 's
     $router->post('getSclassesData', 'SclassController@getSclassesData');
     $router->post('getTermsData', 'SclassController@getTermsData');
     $router->post('createOneSclass', 'SclassController@createOneSclass');
+    $router->post('createOneTerm', 'SclassController@createOneTerm');
 
     //student
     $router->get('students', 'StudentAccountController@index');

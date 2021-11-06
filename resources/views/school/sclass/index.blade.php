@@ -6,7 +6,7 @@
   <div class="panel-heading">学校班级列表</div>
   <div class="panel-body" style="padding-left: 0px; padding-right: 0px">
     <div id="sclass-toolbar">
-        <button id="add-new-btn" class="btn btn-success">新增班级</button>
+        <button id="add-new-sclass" class="btn btn-success">新增班级</button>
     </div>
     <table id="sclass-list" class="table table-condensed table-responsive">
         <thead>
@@ -45,7 +45,7 @@
   <div class="panel-heading">年级学期设置</div>
   <div class="panel-body" style="padding-left: 0px; padding-right: 0px">
     <div id="term-toolbar">
-        <button id="add-new-term-btn" class="btn btn-success">新增学期</button>
+        <button id="add-new-term" class="btn btn-success">新增学期</button>
     </div>
     <table id="term-list" class="table table-condensed table-responsive" >
         <thead>
@@ -119,35 +119,47 @@
 </div>
 
 <!-- Modal -->
-<!-- <div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="add-new-term-modal" tabindex="-1" role="dialog" aria-labelledby="termModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <input type="hidden" name="schoolsId" id="schools-id" value="{{ $schoolsId}}">
-                <h4 class="modal-title" id="myModalLabel">增加班级</h4>
+                <h4 class="modal-title" id="termModalLabel">增加学期</h4>
             </div>
             <div class="modal-body">
               <div class="form-group">
                 <label>入学年</label>
-                <input type="text" class="form-control" name="enterSchoolYear" id="enter-school-year" required="">
+                <input type="text" class="form-control" name="termEnterSchoolYear" id="term-enter-school-year" required="">
               </div>
               <div class="form-group">
-                <label>编号</label>
-                <input type="text" class="form-control" name="classNum" id="class-num" required="">
+                <label>年级名称</label>
+                <input type="text" class="form-control" name="gradeKey" id="grade-key" required="">
               </div>
               <div class="form-group">
-                <label>名称</label>
-                <input type="text" class="form-control" name="classTitle" id="class-title" required="">
+                <label>学期名称</label>
+                <input type="text" class="form-control" name="termSegment" id="term-segment" required="">
               </div>
+              <div class="form-group">
+                <label>开始时间</label>
+                <input type="text" class="form-control" name="startDate" id="start-date" required="">
+              </div>
+              <div class="form-group">
+                <label>结束时间</label>
+                <input type="text" class="form-control" name="endDate" id="end-date" required="">
+              </div>
+<!--               <div class="form-group">
+                <label>当前学期</label>
+                <input type="text" class="form-control" name="isCurrent" id="is-current" required="">
+              </div> -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-success" id="confirm-add-new-btn">增加</button>
+                <button type="button" class="btn btn-success" id="confirm-add-new-term">增加</button>
             </div>
         </div>
     </div>
-</div> -->
+</div>
 @endsection
 
 @section('scripts')

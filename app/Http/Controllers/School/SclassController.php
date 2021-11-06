@@ -43,4 +43,20 @@ class SclassController extends Controller
             throw new Exception("Error Processing Request", 1);
         }
     }
+
+    public function createOneTerm(Request $request)
+    {
+        try {
+            $term = Term::create([
+                'enter_school_year' => $request->get('enter_school_year'),
+                'grade_key' => $request->get('grade_key'),
+                'term_segment' => $request->get('term_segment'),
+                'is_current' => $request->get('is_current'),
+                'from_date' => $request->get('from_date'),
+                'to_date' => $request->get('to_date'),
+            ]);
+        } catch (Exception $e) {
+            throw new Exception("Error Processing Request", 1);
+        }
+    }
 }
