@@ -51,7 +51,7 @@ $(document).ready(function() {
     $("#confirm-add-new-btn").click(function(e) {
         if("" == $("#school-name").val())
         {
-            alert("姓名不能为空！");
+            alert("校名不能为空！");
             return;
         }
         data = {

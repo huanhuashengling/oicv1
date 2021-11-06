@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\School;
 use App\Models\Teacher;
 use App\Models\District;
+use Illuminate\Support\Str;
 
 
 class SchoolController extends Controller
@@ -45,7 +46,7 @@ class SchoolController extends Controller
                 'description' => "",
                 'password' => bcrypt("123456"),
                 'districts_id' => $districtsId,
-                'remember_token' => str_random(10),
+                'remember_token' => Str::random(10),
             ]);
         } catch (Exception $e) {
             throw new Exception("Error Processing Request", 1);

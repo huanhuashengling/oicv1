@@ -94,6 +94,7 @@
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">增加班级</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <input type="hidden" name="schoolsId" id="schools-id" value="{{ $schoolsId}}">
       </div>
       <div class="modal-body">
         <div class="form-group">
