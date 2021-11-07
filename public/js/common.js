@@ -29,6 +29,7 @@ window.getUserInfo = function() {
     method: 'GET',
     data: {},
     success: function (res) {
+      console("success");
       if (res.code == 200) {
         console.log(res.data)
         localStorage.setItem('pro__Login_Userinfo', JSON.stringify(res.data));
@@ -36,6 +37,8 @@ window.getUserInfo = function() {
       }
     },
     error: function (e) {
+      console("error");
+      
     }
   })
   
