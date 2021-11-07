@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google" value="notranslate">
+  <link rel="shortcut icon" href="static/favicon.ico">
+  <title>Scratch 3.0 Player</title>
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/common.js"></script>
+  <script>
+    var workId = urlParams('workId')
+    var workUrl = urlParams('workUrl')
+    var postUrl = urlParams('postUrl');
+    window.scratchConfig = {
+        stageArea: {
+        scale: 1,
+        width: 800,
+        height: 600,
+        showControl: true,
+        showLoading: false,
+        fullscreenButton:{ //全屏按钮
+          show: true,
+          handleBeforeSetStageUnFull(){ //退出全屏前的操作
+            return true
+          },
+          handleBeforeSetStageFull(){ //全屏前的操作
+            return true
+          }
+        },
+        startButton:{ //开始按钮
+          show: true,
+          handleBeforeStart(){ //开始前的操作
+            return true
+          }
+        },
+        stopButton:{ // 停止按钮
+          show: true,
+          handleBeforeStop(){ //停止前的操作
+            return true
+          }
+        }
+      },
+      handleVmInitialized: (vm) => {
+        window.vm = vm
+      },
+      handleDefaultProjectLoaded: () => {
+        if(postUrl){
+          window.scratch.loadProject(postUrl, () => {
+            vm.runtime.start()
+          })
+        }
+        // if(workId){
+        //   getWorkInfo(workId, function (info) {
+        //     window.scratch.loadProject(info.workFileUrl, () => {
+        //       vm.runtime.start()
+        //     })
+        //   })
+        // }
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div id="scratch">
+  </div>
+</body>
+
+<script type="text/javascript" src="lib.min.js"></script>
+<script type="text/javascript" src="chunks/player.js"></script>
+<script>
+
+</script>
+
+</html>
