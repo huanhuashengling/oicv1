@@ -19,7 +19,6 @@ window.uuid = function() {
 
 
 window.getUserInfo = function() {
-
   $.ajax({
     url: '/api/v1/users/info',
     beforeSend: function (request) {
