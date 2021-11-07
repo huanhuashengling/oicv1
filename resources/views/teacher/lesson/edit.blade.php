@@ -42,6 +42,25 @@
                         <br>
                         课时副标题：<input name="subtitle" rows="10" class="form-control" required="required" placeholder="请输入副标题" value="{{ $lesson->subtitle }}"</input>
                         <br>
+                        <label>允许提交的作业文件类型</label>
+                        <div class="form-check form-check-inline">
+                            @php
+                            if('sb3'==$lesson->allow_post_file_types) {
+                                $isSb3Checked = "checked";
+                                $isImgChecked = "";
+                            } else {
+                                $isSb3Checked = "";
+                                $isImgChecked = "checked";
+                            }  
+                            @endphp
+                          <input class="form-check-input" type="radio" name="allow_post_file_types" id="allowTypes1" {{$isSb3Checked}} value="sb3">
+                          <label class="form-check-label" for="inlineRadio1">sb3</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="allow_post_file_types" {{$isImgChecked}} id="allowTypes2" value="'jpg', 'png', 'gif', 'bmp'">
+                          <label class="form-check-label" for="inlineRadio2">img</label>
+                        </div>
+                        <br>
                         <p>编写课堂帮助文档</p>
                         <div id="test-editormd">
                             <textarea name="test-editormd" style="display:none;">{{ $lesson->help_md_doc }}</textarea>

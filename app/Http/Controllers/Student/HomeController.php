@@ -128,10 +128,9 @@ class HomeController extends Controller
           $oldPost->original_name = $originalName;
           $oldPost->file_ext = $ext;
           $oldPost->post_code = $uniqid;
-          $oldPost->content = "";
           if ($oldPost->update()) {
             $bool = Storage::disk($this->getSchoolCode() . 'posts')->delete($oldFilename); 
-
+            // $bool = getThumbnail($uniqid, 140, 100, $this->getSchoolCode(), 'fit', $ext)
             // Session::flash('success', '作业提交成功'); 
             return Redirect::to('student')->with('success', '作业提交成功啦！');
           } else {
@@ -145,7 +144,6 @@ class HomeController extends Controller
           $post->export_name = $filename;
           $post->file_ext = $ext;
           $post->post_code = $uniqid;
-          $post->content = "";
           if ($post->save()) {
             // Session::flash('success', '作业提交成功'); 
             return Redirect::to('student')->with('success', '作业提交成功啦！快去到<a href="/student/classmate">作业墙</a>里看看有谁为自己点赞！');

@@ -26,7 +26,7 @@
     </div>
   @else
     @if ($post)
-      <input id="posted-path" value="{{ $post->storage_name }}" hidden />
+      <input id="posted-path" value="{{ $post->export_name }}" hidden />
     @endif
     <div class="accordion" id="accordionExample">
       <div class="accordion-item">
@@ -46,7 +46,9 @@
       </div>
     </div>
     <div>
-    <a class="btn btn-primary" href="/scratch3/index.html?code={{$JWTToken}}" target="_blank">打开在线编辑窗口</a>
+    @if('sb3' == $lesson['allow_post_file_types'])
+      <a class="btn btn-primary" href="/scratch3/index.html?code={{$JWTToken}}" target="_blank">打开在线编辑窗口</a>
+    @endif
   </div>
     @if(Session::has('success'))
       <div class="alert alert-success">
@@ -59,12 +61,14 @@
         <h4>{!! Session::get('danger') !!}</h4>
       </div>
     @endif
-    <div id="file-errors"></div>
-    <form role="form" method='POST' files=true>
-      <input type="hidden" name="_token" value="{{ csrf_token() }}">
-      <input type="file" class="form-control" name="source" id="input-zh">
-      <input type="hidden" name="lesson_logs_id" value="{{$lessonLog['id']}}">
-    </form>
+    @if('sb3' != $lesson['allow_post_file_types'])
+      <div id="file-errors"></div>
+      <form role="form" method='POST' files=true>
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="file" class="form-control" name="source" id="input-zh">
+        <input type="hidden" name="lesson_logs_id" value="{{$lessonLog['id']}}">
+      </form>
+    @endif
   @endif
 </div>
 @endsection

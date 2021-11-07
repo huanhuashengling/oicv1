@@ -38,6 +38,7 @@ class LessonController extends Controller
             'subtitle' => 'required',
             'courses_id' => 'required',
             'units_id' => 'required',
+            'allowPostFileTypes' => 'required',
         ]);
 
         $lesson = new Lesson;
@@ -45,6 +46,7 @@ class LessonController extends Controller
         $lesson->courses_id = $request->get('courses_id');
         $lesson->title = $request->get('title');
         $lesson->subtitle = $request->get('subtitle');
+        $lesson->allow_post_file_types = $request->get('allowPostFileTypes');
         $lesson->help_md_doc = $request->get('test-editormd');
         $lesson->teachers_id = Auth::guard('teacher')->id();;
 
@@ -73,6 +75,7 @@ class LessonController extends Controller
             'subtitle' => 'required',
             'courses_id' => 'required',
             'units_id' => 'required',
+            'allow_post_file_types' => 'required',
         ]);
 // echo MarkdownEditor::parse($request->get('test-editormd'));
         // dd($request->get('test-editormd'));
@@ -80,6 +83,7 @@ class LessonController extends Controller
         $lesson->units_id = $request->get('units_id');
         $lesson->courses_id = $request->get('courses_id');
         $lesson->title = $request->get('title');
+        $lesson->allow_post_file_types = $request->get('allow_post_file_types');
         $lesson->subtitle = $request->get('subtitle');
         // $lesson->help_md_doc = $request->get('test-editormd');
         $lesson->help_md_doc = $request->get('test-editormd');

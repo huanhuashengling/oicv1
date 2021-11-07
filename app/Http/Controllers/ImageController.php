@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\File;
 
 class ImageController extends Controller
 {
-    public function getImageThumbnail($path, $width = null, $height = null, $school_code = "ys", $type = "fit", $file_ext = "")
+    public function getImageThumbnail($path, $width = null, $height = null, $school_code = "yuying3", $type = "fit", $file_ext = "")
     {
         $images_path = "posts/" . $school_code;
         $path = ltrim($path, "/");
