@@ -1,7 +1,7 @@
 @extends('layouts.student')
 
 @section('content')
-
+<?php phpinfo(); ?>
 <div class="container">
   @if (0 < $unPostedLessonLogsNum)
       <div class="alert alert-danger">
