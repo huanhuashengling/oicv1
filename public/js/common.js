@@ -19,6 +19,7 @@ window.uuid = function() {
 
 
 window.getUserInfo = function() {
+  alert("common getuserinfo")
   $.ajax({
     url: '/api/v1/users/info',
     beforeSend: function (request) {
