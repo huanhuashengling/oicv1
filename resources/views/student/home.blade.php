@@ -59,7 +59,9 @@
         <h4>{!! Session::get('danger') !!}</h4>
       </div>
     @endif
-    <form role="form" method='POST' files=true action="{{ url('student/upload') }}">
+    <div id="file-errors"></div>
+    <form role="form" method='POST' files=true>
+      <input type="hidden" name="_token" value="{{ csrf_token() }}">
       <input type="file" class="form-control" name="source" id="input-zh">
       <input type="hidden" name="lesson_logs_id" value="{{$lessonLog['id']}}">
     </form>

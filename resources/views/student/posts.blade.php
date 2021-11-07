@@ -60,7 +60,7 @@
 @endsection
 
 @section('scripts')
-    <link href="/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
     <script src="/js/fileinput.min.js"></script>
     <script src="/js/locales/zh.js"></script>
     <script src="/js/student/posts.js?v={{rand()}}"></script>

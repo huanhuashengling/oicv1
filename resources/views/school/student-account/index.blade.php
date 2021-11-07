@@ -8,7 +8,6 @@
   <div class="panel-body">
 
     <form method="POST" enctype="multipart/form-data">
-      <input type="hidden" name="_token" value="{{ csrf_token() }}">
       <div class="file-loading">
         <input type="file" class="form-control" name="student" id="import-student-account">
       </div>

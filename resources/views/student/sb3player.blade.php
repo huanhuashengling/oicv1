@@ -92,7 +92,7 @@
     var workId = urlParams('workId')
     var workUrl = urlParams('workUrl')
     var postCode = urlParams('postCode');
-    var postUrl = "/posts/ys/" + urlParams('postCode') + ".sb3";
+    var postUrl = "/posts/yuying3/" + urlParams('postCode') + ".sb3";
 
     $(document).ready(function() {
 

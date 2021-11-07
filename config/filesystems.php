@@ -63,7 +63,26 @@ return [
             'visibility' => 'public',
         ],
 
-        
+        'yuying3posts' => [
+            'driver' => 'local',
+            'root' => public_path('posts/yuying3'),
+            'visibility' => 'public',
+        ],
+
+        'yuying3cover' => [
+            'driver' => 'local',
+            'root' => public_path('posts/yuying3'),
+            // 'url' => 'posts/' . 
+            'visibility' => 'public',
+        ],
+
+        'yuying3works' => [
+            'driver' => 'local',
+            'root' => public_path('works/yuying3'),
+            // 'url' => 'posts/' . 
+            'visibility' => 'public',
+        ],
+
 
         's3' => [
             'driver' => 's3',

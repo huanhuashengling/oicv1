@@ -70,7 +70,7 @@ class UserController extends ApiController
         $student["lesson_logs_id"] = $lessonLog->lesson_logs_id;
         $student["lesson_title"] = $lesson->title;
         if ($post) {
-            $student["post_path"] = "/posts/ys/" . $post->post_code . "." . $post->file_ext;
+            $student["post_path"] = "/posts/yuying3/" . $post->post_code . "." . $post->file_ext;
         } else {
             $student["post_path"] = "/project/blank.sb3";
         }

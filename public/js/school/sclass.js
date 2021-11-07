@@ -120,7 +120,7 @@ $(document).ready(function() {
             'term_segment': $("#term-segment").val(),
             'from_date': $("#start-date").val(),
             'to_date': $("#end-date").val(),
-            'is_current': "0",
+            'is_current': "1",
             // 'schools_id': $("#schools-id").val(),
         }
         // console.log(data);

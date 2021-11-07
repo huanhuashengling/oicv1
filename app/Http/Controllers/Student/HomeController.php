@@ -91,6 +91,7 @@ class HomeController extends Controller
     {
 
       $file = $request->file('source');
+      // dd($file);
       // $redirectUrl = ($request->input('url'))?("/" . $request->input('url')):"";
       if(!$file) {
         return Redirect::to('student')->with('danger', '请重新选择作业提交！');
@@ -122,11 +123,10 @@ class HomeController extends Controller
         $bool = Storage::disk($this->getSchoolCode() . 'posts')->put($filename, file_get_contents($realPath)); 
         //TDDO update these new or update code
         if($oldPost) {
-          $oldFilename = $oldPost->storage_name;
-          $oldPost->storage_name = $filename;
+          $oldFilename = $oldPost->export_name;
+          $oldPost->export_name = $filename;
           $oldPost->original_name = $originalName;
           $oldPost->file_ext = $ext;
-          $oldPost->mime_type = $type;
           $oldPost->post_code = $uniqid;
           $oldPost->content = "";
           if ($oldPost->update()) {
@@ -142,10 +142,8 @@ class HomeController extends Controller
           $post = new Post();
           $post->students_id = Auth::guard("student")->id();
           $post->lesson_logs_id = $request->get('lesson_logs_id');
-          $post->storage_name = $filename;
-          $post->original_name = $originalName;
+          $post->export_name = $filename;
           $post->file_ext = $ext;
-          $post->mime_type = $type;
           $post->post_code = $uniqid;
           $post->content = "";
           if ($post->save()) {

@@ -44,7 +44,7 @@ class PostController extends Controller
         $id = \Auth::guard("student")->id();
         $student = Student::find($id);
         $sclass = Sclass::find($student->sclasses_id);
-        // dd($term);
+
         $from = date('Y-m-d', strtotime($term->from_date)); 
         $to = date('Y-m-d', strtotime($term->to_date));
         $lessonLogs = LessonLog::where(['sclasses_id' => $student['sclasses_id']])
@@ -66,10 +66,12 @@ class PostController extends Controller
             $markNum = 0;
             $validMarkNum = 0;
             $markNames = [];
+
             if (isset($post)) {
+
                 $postState = "未评";
 
-                $post->storage_name = env('APP_URL'). $middir .$post->storage_name;
+                $post->export_name = env('APP_URL'). $middir .$post->export_name;
 
                 if (in_array($post->file_ext, $imgTypes)) {
                     $post["filetype"] = "img";

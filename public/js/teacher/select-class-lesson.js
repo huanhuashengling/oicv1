@@ -29,7 +29,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		var sclassesId = $("#sclasses-id").val();
 		var lessonsId = $("#lessons-id").val();
-		alert(sclassesId + "  "  + lessonsId);
+		// alert(sclassesId + "  "  + lessonsId);
 		$.ajax({
             type: "POST",
             url: '/teacher/createLessonLog',

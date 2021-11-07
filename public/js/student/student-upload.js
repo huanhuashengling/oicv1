@@ -1,18 +1,15 @@
 $(document).ready(function() {
-    $("#input-zh").fileinput({
+	$.ajaxSetup({
+	  headers: {
+	    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	  }
+	});
+
+  $("#input-zh").fileinput({
 		language: "zh", 
-		// uploadUrl: "student/upload", 
-		allowedFileExtensions: ["txt", "jpg", "png", "gif", "bmp", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "html", "sb2"], 
-		// uploadAsync: true
-		overwriteInitial: true,
-		initialPreview: [
-			$("#posted-path").val(),
-			// "http://kartik-v.github.io/bootstrap-fileinput-samples/samples/SampleDOCFile_100kb.doc",
-	    ],
-	    // initialPreviewConfig: [
-	    // 	{type: "gdocs", size: 1002400, caption: $("#file_name").val()},
-	    // ],
-	    initialPreviewShowDelete: false,
-	    initialPreviewAsData: true, // 特别重要
+		uploadUrl: "/student/upload", 
+		showPreview: false,
+		elErrorContainer: '#file-errors',
+		allowedFileExtensions: ["jpg", "png", "gif", "bmp", "sb3"], 
 	});
 });
