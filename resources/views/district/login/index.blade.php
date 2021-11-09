@@ -9,7 +9,7 @@
                 {{ csrf_field() }}
                 <h1 class="h3 mb-3 fw-normal">区级管理登陆</h1>
                 <div class="form-floating">
-                    <input id="username" type="text" class="form-control" name="username" value="fradmin" required autofocus>
+                    <input id="username" type="text" class="form-control" name="username" value="" required autofocus>
                     <label for="username" class="col-md-4 control-label">用户名</label>
                     @if ($errors->has('username'))
                         <span class="help-block">
@@ -18,7 +18,7 @@
                     @endif
                 </div>
                 <div class="form-floating">
-                    <input id="password" type="password" class="form-control" name="password" value="654321" required>
+                    <input id="password" type="password" class="form-control" name="password" value="" required>
                     <label for="password" class="col-md-4 control-label">密码</label>
                     @if ($errors->has('password'))
                         <span class="help-block">
