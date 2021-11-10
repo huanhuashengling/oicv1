@@ -134,14 +134,14 @@ class LessonLogController extends Controller
         $lessonLog = LessonLog::find($request->get('lessonlogsId'));
         // dd($lessonLog);die();
 
-        $students = DB::table('students')->select('students.id', 'students.username', 'posts.file_ext', 'posts.storage_name', 'comments.content', 'post_rates.rate', 'posts.id as posts_id', DB::raw("COUNT(`marks`.`id`) as mark_num"))
+        $students = DB::table('students')->select('students.id', 'students.username', 'posts.file_ext','posts.cover_ext', 'posts.export_name', 'posts.post_code', 'post_rates.rate', 'posts.id as posts_id', DB::raw("COUNT(`marks`.`id`) as mark_num"))
         ->leftJoin('posts', 'posts.students_id', '=', 'students.id')
         ->leftJoin('post_rates', 'post_rates.posts_id', '=', 'posts.id')
         ->leftJoin('comments', 'comments.posts_id', '=', 'posts.id')
         ->leftJoin('marks', 'marks.posts_id', '=', 'posts.id')
         ->where(["students.sclasses_id" => $lessonLog['sclasses_id'], 'posts.lesson_logs_id' => $lessonLog['id']])
         ->where('students.is_lock', "!=", "1")
-        ->groupBy('students.id', 'students.username', 'posts.storage_name', 'comments.content', 'post_rates.rate', 'posts.id')
+        ->groupBy('students.id', 'students.username', 'posts.export_name', 'post_rates.rate','posts.cover_ext', 'posts.post_code', 'posts.id')
         ->orderBy(DB::raw('convert(students.username using gbk)'), "ASC")->get();
         // dd($lessonLog);
         $unPostStudentNameStr = "未交名单:";
@@ -198,7 +198,7 @@ class LessonLogController extends Controller
                 $commentStr = "/评";
             }
             $marksNum = isset($student->mark_num)?$student->mark_num:"";
-            $returnHtml .= "<div class='col-md-2 col-sm-4 col-xs-6' style='padding-left: 5px; padding-right: 5px;'><div class='alert " . $postCss . "' style='padding: 5px;'><div><img class='img-responsive post-btn center-block' value='". $student->posts_id . "' src='" . getThumbnail($student->storage_name, 140, 100, $this->getSchoolCode(), 'fit', $student->file_ext) . "' alt='></div><div><h3 style='margin-top: 10px;'>" . $py->getFirstchar($student->username) . "<small>" . $student->username . "<small></small><span class='text-right'> " . $ratestr . "" . $marksNum . $commentStr . "</span></small></h3></div></div></div>";
+            $returnHtml .= "<div class='col-md-2 col-sm-4 col-xs-6' style='padding-left: 5px; padding-right: 5px;'><div class='alert " . $postCss . "' style='padding: 5px;'><div><img class='img-responsive post-btn center-block' value='". $student->posts_id . "' src='/posts/yuying3/" . $student->post_code . "_c.". $student->cover_ext ."' alt=''></div><div><h3 style='margin-top: 10px;'>" . $py->getFirstchar($student->username) . "<small>" . $student->username . "<small></small><span class='text-right'> " . $ratestr . "" . $marksNum . $commentStr . "</span></small></h3></div></div></div>";
         }
         return $returnHtml;
     }

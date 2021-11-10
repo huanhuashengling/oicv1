@@ -18,11 +18,13 @@
           @endforeach
       </select>
     </div>
+    <br>
     <div class="form-group">
       <select class="form-control" id="sclasses-selection">
           <option value="0">选择班级</option>
       </select>
     </div>
+    <br>
     <div class="form-group">
       <select class="form-control" id="lesson-log-selection">
         <option>选择上课记录</option>
