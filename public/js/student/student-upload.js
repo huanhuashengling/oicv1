@@ -8,9 +8,19 @@ $(document).ready(function() {
   $("#input-zh").fileinput({
 		language: "zh", 
 		uploadUrl: "/student/upload", 
-		showPreview: false,
-		elErrorContainer: '#file-errors',
+		showPreview: true,
+		//elErrorContainer: '#file-errors',
 		allowedFileExtensions: ["jpg", "jpeg", "png", "gif", "bmp"], 
-
+		overwriteInitial: true,
+		initialPreview: [
+			$("#posted-path").val(),
+	    ],
+	  initialPreviewShowDelete: false,
+	  initialPreviewAsData: true, // 特别重要
+	  uploadExtraData: function() { 
+            var out = {};
+            out.lesson_logs_id = $("#lesson_logs_id").val();
+            return out;
+        }
 	});
 });

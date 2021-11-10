@@ -36,6 +36,7 @@ $(document).ready(function() {
             data: {sclassesId: sclassesId, lessonsId: lessonsId},
             success: function( data ) {
                 if ("false" != data) {
+                  window.location.href = "/teacher/takeclass";
                 }
             }
         });

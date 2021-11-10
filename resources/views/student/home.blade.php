@@ -26,8 +26,9 @@
     </div>
   @else
     @if ($post)
-      <input id="posted-path" value="{{ $post->export_name }}" hidden />
+      <input id="posted-path" value="/posts/yuying3/{{ $post->export_name }}" hidden />
     @endif
+    <input type="hidden" id="lesson_logs_id" value="{{$lessonLog['id']}}">
     <div class="accordion" id="accordionExample">
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingOne">
@@ -46,29 +47,29 @@
       </div>
     </div>
     <div>
-    @if('sb3' == $lesson['allow_post_file_types'])
-      <a class="btn btn-primary" href="/scratch3/index.html?code={{$JWTToken}}" target="_blank">打开在线编辑窗口</a>
-    @endif
-  </div>
-    @if(Session::has('success'))
-      <div class="alert alert-success">
-        <h4>{!! Session::get('success') !!}</h4>
-      </div>
-    @endif
+      @if(Session::has('success'))
+        <div class="alert alert-success">
+          <p>{!! Session::get('success') !!}</p>
+        </div>
+      @endif
 
-    @if(Session::has('danger'))
-      <div class="alert alert-danger">
-        <h4>{!! Session::get('danger') !!}</h4>
-      </div>
-    @endif
-    @if('sb3' != $lesson['allow_post_file_types'])
-      <div id="file-errors"></div>
-      <form role="form" method='POST' files=true>
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <input type="file" class="form-control" name="source" id="input-zh">
-        <input type="hidden" name="lesson_logs_id" value="{{$lessonLog['id']}}">
-      </form>
-    @endif
+      @if(Session::has('danger'))
+        <div class="alert alert-danger">
+          <p>{!! Session::get('danger') !!}</p>
+        </div>
+      @endif
+
+      @if('sb3' == $lesson['allow_post_file_types'])
+        <a class="btn btn-primary" href="/scratch3/index.html?code={{$JWTToken}}" target="_blank">打开在线编辑窗口</a>
+      @else
+        <div id="file-errors"></div>
+        <form role="form" method='POST' files=true>
+          <input type="hidden" name="_token" value="{{ csrf_token() }}">
+          <input type="file" class="form-control" name="source" id="input-zh">
+        </form>
+      @endif
+    </div>
+
   @endif
 </div>
 @endsection

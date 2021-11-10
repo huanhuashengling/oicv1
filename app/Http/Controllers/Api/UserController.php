@@ -107,7 +107,7 @@ class UserController extends ApiController
             $coverExt = "png";
             $coverType = "image/png";
             $coverRealPath = $cover->getRealPath();
-            $covername = $uniqid . '.' . $coverExt;
+            $covername = $uniqid . '_c.' . $coverExt;
             $coverbool = Storage::disk($schoolCode . 'cover')->put($covername, file_get_contents($coverRealPath));
         } else {
             return $this->success("封面文件传输错误");
@@ -116,7 +116,7 @@ class UserController extends ApiController
         if ($filebool & $coverbool) {
             if($oldPost) {
                 $oldFilename = $oldPost->post_code . "." . $oldPost->file_ext;
-                $oldCovername = $oldPost->post_code . "." . $oldPost->cover_ext;
+                $oldCovername = $oldPost->post_code . "_c." . $oldPost->cover_ext;
                 $oldPost->export_name = $uniqid . "." . $fileExt;
                 $oldPost->file_ext = $fileExt;
                 $oldPost->cover_ext = $coverExt;

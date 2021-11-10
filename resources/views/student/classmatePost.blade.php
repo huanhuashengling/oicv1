@@ -52,7 +52,7 @@
             <div class="card h-100 {{$cardCss}}"><!-- style="padding-left: 5px; padding-right: 5px;"    col-sm-3 col-xs-4-->
                 <!--<div class="{{ $cardCss }}" > style="height: 147px; padding-left: 10px; padding-right: 10px"-->
                     <!--<div class="text-center"><img height="140px" value="{{ $post['pid'] }}" src="/imager?src={{$post_storage_name}}"></div>-->
-                <a href="/student/sb3player?postCode={{$post->post_code}}" style="padding: 5px;"><img class="card-img-top" src="/posts/yuying3/{{$post->post_code}}.{{$post->cover_ext}}" value="{{ $post['pid'] }}" alt="Card image cap"></a>
+                <a href="/student/sb3player?postCode={{$post->post_code}}" style="padding: 5px;"><img class="card-img-top" src="/posts/yuying3/{{$post->post_code}}_c.{{$post->cover_ext}}" value="{{ $post['pid'] }}" alt="Card image cap"></a>
                 <!-- <div class="card-header bg-transparent border-success" value="{{ $post['pid'] }}"> </div> -->
                     <!-- <div><img class="img-responsive thumb-img"  src="" alt=""></div> style="margin-top: 10px; margin-bottom: 5px;" -->
                     <!-- <div><div></div>  </div> -->

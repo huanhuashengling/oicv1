@@ -100,7 +100,7 @@ class HomeController extends Controller
       $studentsId = Auth::guard("student")->id();
       
       // return $this->getSchoolCode();
-      dd($request->get('lesson_logs_id'));
+      // dd($request->get('lesson_logs_id'));
       $lessonLogsId = $request->get('lesson_logs_id');
       $oldPost = Post::where(['lesson_logs_id' => $lessonLogsId, "students_id" => $studentsId])->orderBy('id', 'desc')->first();
 
@@ -125,11 +125,11 @@ class HomeController extends Controller
 
         Image::configure(array('driver' => 'imagick')); 
         Image::make(file_get_contents($realPath))
-              ->resize(100, 140)->save(public_path('posts/yuying3/') . $uniqid . '_cover.png');
+              ->resize(100, 140)->save(public_path('posts/yuying3/') . $uniqid . '_c.png');
 
         //TDDO update these new or update code
         if($oldPost) {
-          $oldCoverFilename = $oldPost->post_code . "_cover.png";
+          $oldCoverFilename = $oldPost->post_code . "_c.png";
           $oldFilename = $oldPost->export_name;
           $oldPost->export_name = $filename;
           $oldPost->cover_ext = "png";
@@ -149,7 +149,7 @@ class HomeController extends Controller
           $post->lesson_logs_id = $request->get('lesson_logs_id');
           $post->export_name = $filename;
           $post->file_ext = $ext;
-          $oldPost->cover_ext = "png";
+          $post->cover_ext = "png";
           $post->post_code = $uniqid;
           if ($post->save()) {
             return Redirect::to('student')->with('success', '作业提交成功！');
