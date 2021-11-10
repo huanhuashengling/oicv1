@@ -19,7 +19,16 @@
                         {{ method_field('PATCH') }}
                         {!! csrf_field() !!}
                         <div class="form-group">
-                        {!! Form::select('courses_id', $courses, $unit["courses"]["id"], ['class' => 'form-control', 'placeholder' => '请选择课程']) !!}
+                            <select name="courses_id" class="form-control">
+                                <option>请选择课程</option>
+                                @foreach ($courses as $course)
+                                    @if($unit->courses_id == $course->id)
+                                    <option value="{{ $loop->index + 1 }}" selected="selected">{{ $loop->index + 1 }}. {{ $course->title }}</option>
+                                    @else
+                                    <option value="{{ $loop->index + 1 }}">{{ $loop->index + 1 }}. {{ $course->title }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
                     </div>
 
                         单元标题： <input type="text" name="title" class="form-control" required="required" value="{{ $unit->title }}" placeholder="请输入标题">

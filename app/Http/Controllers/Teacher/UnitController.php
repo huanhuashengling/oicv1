@@ -71,7 +71,7 @@ class UnitController extends Controller
     {
         // dd(Unit::with("courses")->find($id)->withCourses(Course::get()->pluck('title', 'id')));
         $unit = Unit::with("courses")->find($id);
-        $courses = Course::get()->pluck('title', 'id');
+        $courses = Course::select("id", "title")->get();
         return view('teacher/unit/edit', compact('unit', 'courses'));
     }
 

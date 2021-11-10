@@ -35,6 +35,7 @@ window.getUserInfo = function() {
       }
     },
     error: function (e) {
+      window.location.href = "/student/logout";
     }
   })
   

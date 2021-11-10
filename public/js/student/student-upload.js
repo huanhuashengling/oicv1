@@ -10,6 +10,7 @@ $(document).ready(function() {
 		uploadUrl: "/student/upload", 
 		showPreview: false,
 		elErrorContainer: '#file-errors',
-		allowedFileExtensions: ["jpg", "png", "gif", "bmp"], 
+		allowedFileExtensions: ["jpg", "jpeg", "png", "gif", "bmp"], 
+
 	});
 });

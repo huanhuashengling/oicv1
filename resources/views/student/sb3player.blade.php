@@ -128,9 +128,12 @@
           } else if (2 == data.postRate) {
             $("#post-rate").text("优");
             $("#post-rate-icon").prop("src", "/img/star-fill-red" + data.postRate + ".svg");
-          } else {
+          } else if (3 == data.postRate) {
             $("#post-rate").text("合格");
             $("#post-rate-icon").prop("src", "/img/star-fill-red" + data.postRate + ".svg");
+          }  else {
+            $("#post-rate").text("");
+            $("#post-rate-icon").prop("src", "/img/star-fill-red4.svg");
           }
         }
       });

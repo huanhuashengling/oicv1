@@ -181,14 +181,14 @@ class ClassmateController extends Controller
 
     public function getSearchNamePostsData($searchName) {
         $schoolsId = $this->getSchool()->schoolsId;
-        $posts = Post::select('posts.id as pid', 'sclasses.class_title', 'terms.grade_key', 'posts.file_ext', 'posts.storage_name', 'students.username')
+        $posts = Post::select('posts.id as pid', 'sclasses.class_title', 'terms.grade_key', 'posts.post_code', 'posts.file_ext', 'posts.cover_ext', 'students.username')
                 ->join('students', 'posts.students_id', '=', 'students.id')
                 ->join('sclasses', 'students.sclasses_id', '=', 'sclasses.id')
                 ->join('terms', 'terms.enter_school_year', '=', 'sclasses.enter_school_year')
                 ->where('terms.is_current', '=', 1)
                 ->where('sclasses.schools_id', '=', $schoolsId)
                 ->where('students.username', 'like', '%'.$searchName.'%')
-                ->groupBy('posts.id', 'sclasses.class_title', 'terms.grade_key', 'posts.file_ext', 'posts.storage_name', 'students.username')
+                ->groupBy('posts.id', 'sclasses.class_title', 'terms.grade_key', 'posts.post_code', 'posts.file_ext', 'posts.cover_ext', 'students.username')
                 ->orderby("posts.id", "DESC")->paginate(24);
         return $posts;
     }

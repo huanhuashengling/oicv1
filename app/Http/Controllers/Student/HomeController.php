@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
+
+use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\File;
 use \Auth;
 use \Storage;
 use MarkdownEditor;
@@ -89,18 +92,15 @@ class HomeController extends Controller
 
     public function upload(Request $request)
     {
-
       $file = $request->file('source');
-      // dd($file);
-      // $redirectUrl = ($request->input('url'))?("/" . $request->input('url')):"";
       if(!$file) {
         return Redirect::to('student')->with('danger', '请重新选择作业提交！');
       }
 
       $studentsId = Auth::guard("student")->id();
       
-
-              // return $this->getSchoolCode();
+      // return $this->getSchoolCode();
+      dd($request->get('lesson_logs_id'));
       $lessonLogsId = $request->get('lesson_logs_id');
       $oldPost = Post::where(['lesson_logs_id' => $lessonLogsId, "students_id" => $studentsId])->orderBy('id', 'desc')->first();
 
@@ -118,24 +118,30 @@ class HomeController extends Controller
         $realPath = $file->getRealPath();
 
         $uniqid = uniqid();
-        $filename = $originalName . '-' . $uniqid . '.' . $ext;
+        // $filename = $originalName . '-' . $uniqid . '.' . $ext;
+        $filename = $uniqid . '.' . $ext;
 
         $bool = Storage::disk($this->getSchoolCode() . 'posts')->put($filename, file_get_contents($realPath)); 
+
+        Image::configure(array('driver' => 'imagick')); 
+        Image::make(file_get_contents($realPath))
+              ->resize(100, 140)->save(public_path('posts/yuying3/') . $uniqid . '_cover.png');
+
         //TDDO update these new or update code
         if($oldPost) {
+          $oldCoverFilename = $oldPost->post_code . "_cover.png";
           $oldFilename = $oldPost->export_name;
           $oldPost->export_name = $filename;
-          $oldPost->original_name = $originalName;
+          $oldPost->cover_ext = "png";
           $oldPost->file_ext = $ext;
           $oldPost->post_code = $uniqid;
           if ($oldPost->update()) {
-            $bool = Storage::disk($this->getSchoolCode() . 'posts')->delete($oldFilename); 
-            // $bool = getThumbnail($uniqid, 140, 100, $this->getSchoolCode(), 'fit', $ext)
-            // Session::flash('success', '作业提交成功'); 
-            return Redirect::to('student')->with('success', '作业提交成功啦！');
+            // $bool = Storage::disk($this->getSchoolCode() . 'posts')->delete($oldFilename); 
+            // $bool = Storage::disk($this->getSchoolCode() . 'posts')->delete($oldCoverFilename); 
+            // Session::flash('success', '作业提交成功!');
+            // return Redirect::to('student')->with('success', '作业提交成功！');
           } else {
             return Redirect::to('student')->with('danger', '作业提交失败，请重新操作！');
-            // Session::flash('error', '作业提交失败'); 
           }
         } else {
           $post = new Post();
@@ -143,50 +149,18 @@ class HomeController extends Controller
           $post->lesson_logs_id = $request->get('lesson_logs_id');
           $post->export_name = $filename;
           $post->file_ext = $ext;
+          $oldPost->cover_ext = "png";
           $post->post_code = $uniqid;
           if ($post->save()) {
-            // Session::flash('success', '作业提交成功'); 
-            return Redirect::to('student')->with('success', '作业提交成功啦！快去到<a href="/student/classmate">作业墙</a>里看看有谁为自己点赞！');
+            return Redirect::to('student')->with('success', '作业提交成功！');
           } else {
             return Redirect::to('student')->with('danger', '作业提交失败，请重新操作！');
-            // Session::flash('error', '作业提交失败'); 
           }
         }
       } else {
         return Redirect::to('student')->with('danger', '文件上传失败，请确认是否文件过大？');
       }
     }
-
-  public function imgToBase64($img_file) {
-     $img_base64 = '';
-     if (file_exists($img_file)) {
-         $app_img_file = $img_file; // 图片路径
-         $img_info = getimagesize($app_img_file); // 取得图片的大小，类型等
- 
-         //echo '<pre>' . print_r($img_info, true) . '</pre><br>';
-         $fp = fopen($app_img_file, "r"); // 图片是否可读权限
- 
-         if ($fp) {
-             $filesize = filesize($app_img_file);
-             $content = fread($fp, $filesize);
-             $file_content = chunk_split(base64_encode($content)); // base64编码
-             switch ($img_info[2]) {           //判读图片类型
-                 case 1: $img_type = "gif";
-                     break;
-                 case 2: $img_type = "jpg";
-                     break;
-                 case 3: $img_type = "png";
-                     break;
-             }
- 
-             $img_base64 = 'data:image/' . $img_type . ';base64,' . $file_content;//合成图片的base64编码
- 
-         }
-         fclose($fp);
-     }
-     return $img_base64; //返回图片的base64
- }
-
 
     public function getReset()
     {
