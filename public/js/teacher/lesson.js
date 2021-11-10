@@ -30,13 +30,13 @@ $(document).ready(function() {
                     }  
                 }],
         responseHandler: function (res) {
-        	// console.log(res);
+        	console.log(res);
             return res;
         },
     });
 
     $("#add-lesson-btn").click(function(e) {
-    	window.location.href = "/teacher/lesson/create";
+    	window.location.href = "/teacher/lesson/create?cId="+$("#courses-id").val()+"&uId="+$("#units-id").val();
     });
 });
 
@@ -86,7 +86,7 @@ window.actionEvents = {
         });
     },
 	'click .edit': function(e, value, row, index) {
-		window.location.href = "/teacher/lesson/"+row.id+"/edit";
+		window.location.href = "/teacher/lesson/"+row.id+"/edit?cId="+$("#courses-id").val()+"&uId="+$("#units-id").val();;
     },
     'click .closeLesson': function(e, value, row, index) {
         // console.log(row);

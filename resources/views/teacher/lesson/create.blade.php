@@ -22,15 +22,28 @@
                              <select name="courses_id" class="form-control">
                                 <option>请选择课程</option>
                                 @foreach ($courses as $course)
-                                    <option value="{{ $loop->index + 1 }}">{{ $loop->index + 1 }}. {{ $course }}</option>
+                                    @if($coursesId == $course->id)
+                                        <option value="{{ $course->id }}"  selected="selected">{{ $course->id }}. {{ $course->title }}</option>
+                                    @else
+                                        <option value="{{ $course->id }}">{{ $course->id }}. {{ $course->title }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
+                        <br>
                         <div class="form-group">
                             <select class="form-control" name="units_id" id="units-id">
-                                <option>请先选择课程，再来选择单元</option>
+                                <option>请选择单元</option>
+                                @foreach ($units as $unit)
+                                    @if($unitsId == $unit->id)
+                                        <option value="{{ $unit->id }}"  selected="selected">{{ $unit->id }}. {{ $unit->title }}</option>
+                                    @else
+                                        <option value="{{ $unit->id }}">{{ $unit->id }}. {{ $unit->title }}</option>
+                                    @endif
+                                @endforeach
                             </select>
                         </div>
+                        <br>
                         <input type="text" name="title" class="form-control" required="required" placeholder="请输入课时标题">
                         <br>
                         <input type="text" name="subtitle" class="form-control" required="required" placeholder="请输入课时副标题" />

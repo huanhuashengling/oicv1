@@ -20,9 +20,12 @@
                         {!! csrf_field() !!}
                         <div class="form-group">
                             <select name="courses_id" class="form-control">
-                                <option>请选择课程</option>
                                 @foreach ($courses as $course)
-                                    <option value="{{ $course->id }}">{{ $course->id }}. {{ $course->title }}</option>
+                                    @if($coursesId == $course->id)
+                                        <option value="{{ $course->id }}"  selected="selected">{{ $course->id }}. {{ $course->title }}</option>
+                                    @else
+                                        <option value="{{ $course->id }}">{{ $course->id }}. {{ $course->title }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>

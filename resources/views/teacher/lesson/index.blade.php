@@ -6,6 +6,7 @@
     <div id="toolbar">
         <button class="btn btn-success" id="add-lesson-btn">新增课</button>
         <input type="hidden" name="" id="units-id" value="{{$uId}}">
+        <input type="hidden" name="" id="courses-id" value="{{$unit->course->id}}">
     </div>
     <table id="lesson-list" class="table table-condensed table-responsive">
         <thead>

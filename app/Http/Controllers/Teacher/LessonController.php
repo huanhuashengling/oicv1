@@ -26,9 +26,13 @@ class LessonController extends Controller
         return view('teacher/lesson/index', compact("uId", "unit"));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('teacher/lesson/create')->withCourses(Course::get()->pluck('title', 'id'));
+        $coursesId = $request->get("cId");
+        $unitsId = $request->get("uId");
+        $courses = Course::get();
+        $units = Unit::get();
+        return view('teacher/lesson/create', compact("coursesId", "unitsId", "courses", "units"));
     }
 
     public function store(Request $request)
@@ -59,13 +63,15 @@ class LessonController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $lesson = Lesson::with("units")->find($id);
-        $courses = Course::select("id", "title")->get();
-        $units = Unit::select("id", "title")->where(['courses_id' => $lesson->courses_id])->get();
+        $lesson = Lesson::find($id);
+        $coursesId = $request->get("cId");
+        $unitsId = $request->get("uId");
+        $courses = Course::get();
+        $units = Unit::get();
         // var_dump($courses);
         // var_dump($units);
         // dd($lesson);
-        return view('teacher/lesson/edit', compact("lesson", "courses", "units"));
+        return view('teacher/lesson/edit', compact("lesson", "courses", "units", "coursesId", "unitsId"));
     }
 
     public function update(Request $request, $id)
