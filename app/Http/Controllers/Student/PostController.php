@@ -24,9 +24,6 @@ class PostController extends Controller
 {
     public function index()
     {
-        $imgTypes = ['jpg', 'jpeg', 'bmp', 'gif', 'png'];
-        $docTypes = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
-
         $id = \Auth::guard("student")->id();
         $student = Student::find($id);
         $sclass = Sclass::find($student->sclasses_id);
@@ -69,19 +66,9 @@ class PostController extends Controller
 
             if (isset($post)) {
 
-                $postState = "未评";
+                $postState = "已交";
 
                 $post->export_name = env('APP_URL'). $middir .$post->export_name;
-
-                if (in_array($post->file_ext, $imgTypes)) {
-                    $post["filetype"] = "img";
-                    $post["previewPath"] = getThumbnail($post['storage_name'], 800, 600, $this->getSchoolCode(), 'fit', $post['file_ext']);
-                }
-                //  elseif (in_array($post->file_ext, $docTypes)) {
-                //     $post["filetype"] = "doc";
-                //     $post["previewPath"] = $post->storage_name;
-                // }
-
 
                 $postRate = PostRate::where(['posts_id' => $post['id']])->first();
                 // $rate = isset($postRate)?$postRate['rate']:"";
@@ -239,6 +226,12 @@ class PostController extends Controller
     {
         $postCode = $request->get("postCode");
         return view('student/sb3player', compact("postCode"));
+    }
+
+    public function imgPreview(Request $request)
+    {
+        $postCode = $request->get("postCode");
+        return view('student/imgPreview', compact("postCode"));
     }
 
     public function getOnePostByCode(Request $request)

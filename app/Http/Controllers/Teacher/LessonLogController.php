@@ -130,7 +130,6 @@ class LessonLogController extends Controller
 
     public function getPostDataByTermAndSclass(Request $request)
     {
-        $lessonLogsId = $request->get('lessonlogsId');
         $lessonLog = LessonLog::find($request->get('lessonlogsId'));
         // dd($lessonLog);die();
 
@@ -164,12 +163,12 @@ class LessonLogController extends Controller
         // return view('teacher/takeclass', compact('students', 'lessonLog', 'py', 'allCount', 'unPostStudentName'));
         // $unpostCount = 0;
         $postedCount = $allCount-$unpostCount;
-        $panelHeadStr = "(全部".$allCount.")"." "."(已交".$postedCount.")"." "."(未交".$unpostCount.")";
+        $cardHeadStr = "(全部".$allCount.")"." "."(已交".$postedCount.")"." "."(未交".$unpostCount.")";
         
-        $returnHtml = "<div class='panel panel-default'><div class='panel-heading'><h4>".$panelHeadStr."</h4></div><div class='panel-body'>" . $this->buildStudentPostsList($students) . " </div><div class='panel-footer'><h4>".$unPostStudentNameStr."</h4></div></div>";
+        $returnHtml = "<div class='card card-success'><div class='card-header'><h4>".$cardHeadStr."</h4></div><div class='card-body'>" . $this->buildStudentPostsList($students) . " </div><div class='card-footer'><h4>".$unPostStudentNameStr."</h4></div></div>";
             
         $returnHtml .= "<input type='hidden' id='lesson-log-id' value='" . $lessonLog['id'] . "'>";
-        $returnHtml .= "<div class='panel panel-default'><div class='panel-heading'><div class='panel-title'><button class='btn btn-default' id='update-rethink'>点击记录教学反思</button></div></div><div class='panel-body'><textarea class='form-control' rows='5' id='rethink' name='rethink'>" . $lessonLog['rethink'] . "</textarea></div></div>";
+        //$returnHtml .= "<div class='card card-default'><div class='card-heading'><div class='card-title'><button class='btn btn-default' id='update-rethink'>点击记录教学反思</button></div></div><div class='card-body'><textarea class='form-control' rows='5' id='rethink' name='rethink'>" . $lessonLog['rethink'] . "</textarea></div></div>";
 
 
         return $returnHtml;

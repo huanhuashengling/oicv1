@@ -1,11 +1,3 @@
-var ViewUrlMask = "http:\u002f\u002f10.63.7.189\u002fop\u002fview.aspx?src=WACFILEURL";
-var EmbedCodeMask = "\u003ciframe src=\u0027http:\u002f\u002f10.63.7.189\u002fop\u002fembed.aspx?src=WACFILEURL\u0027 width=\u0027800px\u0027 height=\u0027600px\u0027 frameborder=\u00270\u0027\u003eThis is an embedded \u003ca target=\u0027_blank\u0027 href=\u0027http:\u002f\u002foffice.com\u0027\u003eMicrosoft Office\u003c\u002fa\u003e document, powered by \u003ca target=\u0027_blank\u0027 href=\u0027http:\u002f\u002foffice.com\u002fwebapps\u0027\u003eOffice Web Apps\u003c\u002fa\u003e.\u003c\u002fiframe\u003e";
-var UrlPlaceholder = "WACFILEURL";
-var OriginalUrlElementId = "OriginalUrl";
-var GeneratedViewUrlElementId = "GeneratedViewUrl";
-var GeneratedEmbedCodeElementId = "GeneratedEmbedCode";
-var CopyViewUrlLinkId = "CopyViewUrl";
-var CopyEmbedCodeLinkId = "CopyEmbedCode";
 $(document).ready(function() {
 	$.ajaxSetup({
 	  headers: {
@@ -184,10 +176,7 @@ $(document).ready(function() {
 
                 } else {
                     if ("doc" == data.filetype) {
-                        // $('#doc-preview').removeClass("hidden");
-                        $('#classmate-post-show').addClass("hidden");
-                        // $('#flashContent').addClass("hidden");
-                        // $('#doc-preview').html(OnCreateUrl(data.storage_name));
+
                     } else if ("img" == data.filetype) {
                         // $('#doc-preview').addClass("hidden");
                         $('#classmate-post-show').removeClass("hidden");
@@ -250,35 +239,3 @@ function rescale(){
     $('#classmate-post-modal').css('top', 0);
 }
 $(window).bind("resize", rescale);
-
-function showScratch(sbPath)
-{
-    var flashvars = {
-      project: sbPath,
-      autostart: 'false'
-    };
-
-    var params = {
-      bgcolor: '#FFFFFF',
-      allowScriptAccess: 'always',
-      allowFullScreen: 'true',
-      wmode: "direct",
-      menu: "false"
-      
-    };
-    var attributes = {};
-
-    swfobject.embedSWF('/scratch/Scratch.swf', 'flashContent', '100%', '600px', '10.2.0','/scratch/expressInstall.swf', flashvars, params, attributes);
-}
-
-function OnCreateUrl(data)
-{
-    // var originalUrl = document.getElementById(OriginalUrlElementId).value;
-    var originalUrl = data;
-
-    var generatedViewUrl = ViewUrlMask.replace(UrlPlaceholder, encodeURIComponent(originalUrl));
-    var generatedEmbedCode = EmbedCodeMask.replace(UrlPlaceholder, encodeURIComponent(originalUrl));
-    return generatedEmbedCode;
-    // document.getElementById(GeneratedViewUrlElementId).value = generatedViewUrl;
-    // document.getElementById(GeneratedEmbedCodeElementId).value = generatedEmbedCode;
-}

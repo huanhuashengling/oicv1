@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth.student', 'prefix' => 'student','namespace' 
 
 
     $router->get('sb3player', 'PostController@sb3player');
+    $router->get('imgPreview', 'PostController@imgPreview');
 
 });
 

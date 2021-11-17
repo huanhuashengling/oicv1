@@ -1,12 +1,3 @@
-var ViewUrlMask = "http:\u002f\u002f10.63.7.189\u002fop\u002fview.aspx?src=WACFILEURL";
-var EmbedCodeMask = "\u003ciframe src=\u0027http:\u002f\u002f10.63.7.189\u002fop\u002fembed.aspx?src=WACFILEURL\u0027 width=\u0027800px\u0027 height=\u0027600px\u0027 frameborder=\u00270\u0027\u003eThis is an embedded \u003ca target=\u0027_blank\u0027 href=\u0027http:\u002f\u002foffice.com\u0027\u003eMicrosoft Office\u003c\u002fa\u003e document, powered by \u003ca target=\u0027_blank\u0027 href=\u0027http:\u002f\u002foffice.com\u002fwebapps\u0027\u003eOffice Web Apps\u003c\u002fa\u003e.\u003c\u002fiframe\u003e";
-var UrlPlaceholder = "WACFILEURL";
-var OriginalUrlElementId = "OriginalUrl";
-var GeneratedViewUrlElementId = "GeneratedViewUrl";
-var GeneratedEmbedCodeElementId = "GeneratedEmbedCode";
-var CopyViewUrlLinkId = "CopyViewUrl";
-var CopyEmbedCodeLinkId = "CopyEmbedCode";
-
 $(document).ready(function() {
 	$.ajaxSetup({
 	  headers: {
@@ -103,14 +94,7 @@ $(document).ready(function() {
                 if ("false" == data) {
 
                 } else {
-                    // console.log(data);
-                    // console.log(OnCreateUrl(data));
-
                     if ("doc" == data.filetype) {
-                        $('#post-show').addClass("hidden");
-                        $('#doc-preview').removeClass("hidden");
-                        $('#flashContent').addClass("hidden");
-                        $('#doc-preview').html(OnCreateUrl(data.url));
                     } else if ("img" == data.filetype) {
                         $('#post-show').removeClass("hidden");
                         $('#doc-preview').addClass("hidden");
@@ -131,8 +115,6 @@ $(document).ready(function() {
                                         "<param name='menu' value='false'/>\n"+
                                     "</object>";
                         $('#flashContent').html(tHtml);
-                        // showScratch(data.url);
-                        // showScratch(data.url);
                     }
                     // $('#doc-preview').attr("src", "http://lessons_id/op/embed.aspx?src=" + data);
 
@@ -159,14 +141,3 @@ $(document).ready(function() {
 	        $('#myModal').modal();
 	    })
 });
-function OnCreateUrl(data)
-{
-    // var originalUrl = document.getElementById(OriginalUrlElementId).value;
-    var originalUrl = data;
-
-    var generatedViewUrl = ViewUrlMask.replace(UrlPlaceholder, encodeURIComponent(originalUrl));
-    var generatedEmbedCode = EmbedCodeMask.replace(UrlPlaceholder, encodeURIComponent(originalUrl));
-    return generatedEmbedCode;
-    // document.getElementById(GeneratedViewUrlElementId).value = generatedViewUrl;
-    // document.getElementById(GeneratedEmbedCodeElementId).value = generatedEmbedCode;
-}

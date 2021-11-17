@@ -2,9 +2,8 @@
 
 @section('content')
 <div class="container">
-  <form class="form-inline">
-
-    <div class="form-group">
+  <form class="row g-3">
+    <div class="col-md-3">
       <select class="form-control" id="term-selection">
           <option value="0">选择学期</option>
           @foreach ($terms as $term)
@@ -18,14 +17,12 @@
           @endforeach
       </select>
     </div>
-    <br>
-    <div class="form-group">
+    <div class="col-md-1">
       <select class="form-control" id="sclasses-selection">
           <option value="0">选择班级</option>
       </select>
     </div>
-    <br>
-    <div class="form-group">
+    <div class="col-md-8">
       <select class="form-control" id="lesson-log-selection">
         <option>选择上课记录</option>
       </select>
@@ -34,6 +31,14 @@
 
   <div id="posts_area">
 
+  </div>
+  <div class="card card-default">
+    <div class="card-header">
+        <button class="btn btn-success" id="update-rethink">点击记录教学反思</button>
+    </div>
+    <div class="card-body">
+      <textarea class="form-control" rows="5" id="rethink" name="rethink">{{@$lessonLog['rethink']}}</textarea>
+    </div>
   </div>
 </div>
 

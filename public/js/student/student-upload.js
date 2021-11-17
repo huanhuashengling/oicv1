@@ -9,7 +9,8 @@ $(document).ready(function() {
 		language: "zh", 
 		uploadUrl: "/student/upload", 
 		showPreview: true,
-		//elErrorContainer: '#file-errors',
+		elErrorContainer: '#file-errors',
+    elCaptionContainer: '#caption-info',
 		allowedFileExtensions: ["jpg", "jpeg", "png", "gif", "bmp"], 
 		overwriteInitial: true,
 		initialPreview: [
@@ -18,9 +19,9 @@ $(document).ready(function() {
 	  initialPreviewShowDelete: false,
 	  initialPreviewAsData: true, // 特别重要
 	  uploadExtraData: function() { 
-            var out = {};
-            out.lesson_logs_id = $("#lesson_logs_id").val();
-            return out;
-        }
+        var out = {};
+        out.lesson_logs_id = $("#lesson_logs_id").val();
+        return out;
+    }
 	});
 });

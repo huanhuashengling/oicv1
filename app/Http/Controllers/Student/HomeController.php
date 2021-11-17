@@ -94,7 +94,8 @@ class HomeController extends Controller
     {
       $file = $request->file('source');
       if(!$file) {
-        return Redirect::to('student')->with('danger', '请重新选择作业提交！');
+        return json_encode("{'请重新选择作业提交！'}");
+        // return Redirect::to('student')->with('danger', '请重新选择作业提交！');
       }
 
       $studentsId = Auth::guard("student")->id();
@@ -125,7 +126,7 @@ class HomeController extends Controller
 
         Image::configure(array('driver' => 'imagick')); 
         Image::make(file_get_contents($realPath))
-              ->resize(100, 140)->save(public_path('posts/yuying3/') . $uniqid . '_c.png');
+              ->resize(240, 180)->save(public_path('posts/yuying3/') . $uniqid . '_c.png');
 
         //TDDO update these new or update code
         if($oldPost) {
@@ -136,12 +137,11 @@ class HomeController extends Controller
           $oldPost->file_ext = $ext;
           $oldPost->post_code = $uniqid;
           if ($oldPost->update()) {
-            // $bool = Storage::disk($this->getSchoolCode() . 'posts')->delete($oldFilename); 
-            // $bool = Storage::disk($this->getSchoolCode() . 'posts')->delete($oldCoverFilename); 
-            // Session::flash('success', '作业提交成功!');
-            // return Redirect::to('student')->with('success', '作业提交成功！');
+            $bool = Storage::disk($this->getSchoolCode() . 'posts')->delete($oldFilename); 
+            $bool = Storage::disk($this->getSchoolCode() . 'posts')->delete($oldCoverFilename); 
+            return json_encode("{'作业提交成功！'}");
           } else {
-            return Redirect::to('student')->with('danger', '作业提交失败，请重新操作！');
+            return json_encode("{'作业提交失败，请重新操作！'}");
           }
         } else {
           $post = new Post();
@@ -152,13 +152,13 @@ class HomeController extends Controller
           $post->cover_ext = "png";
           $post->post_code = $uniqid;
           if ($post->save()) {
-            return Redirect::to('student')->with('success', '作业提交成功！');
+            return json_encode("{'作业提交成功！''}");
           } else {
-            return Redirect::to('student')->with('danger', '作业提交失败，请重新操作！');
+            return json_encode("{'作业提交失败，请重新操作！'}");
           }
         }
       } else {
-        return Redirect::to('student')->with('danger', '文件上传失败，请确认是否文件过大？');
+            return json_encode("{'文件上传失败，请确认是否文件过大？'}");
       }
     }
 

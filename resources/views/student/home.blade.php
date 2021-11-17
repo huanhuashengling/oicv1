@@ -63,6 +63,7 @@
         <a class="btn btn-primary" href="/scratch3/index.html?code={{$JWTToken}}" target="_blank">打开在线编辑窗口</a>
       @else
         <div id="file-errors"></div>
+        <div id="caption-info"></div>
         <form role="form" method='POST' files=true>
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <input type="file" class="form-control" name="source" id="input-zh">

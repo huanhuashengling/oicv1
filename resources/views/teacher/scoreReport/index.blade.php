@@ -2,15 +2,24 @@
 
 @section('content')
 <div class="container">
-    <!-- <div class="form-group col-md-2"> Form::select('score_report_sclasses_id', $classData, null, ['class'=>'form-control']) !!}</div> -->
-    <div class="form-group col-md-2">
-        <select name="score_report_terms_id" class='form-control'>
-            <option>请先选择班级</option>
-        </select>
+    <div class="row g-3">
+        <div class="form-group col-md-4">
+            <select name="score_report_sclasses_id" class='form-control'>
+                <option>请选择班级</option>
+                @foreach ($sclasses as $sclass)
+                <option value="{{$sclass->id}}">{{$sclass['enter_school_year']}}级{{$sclass['class_title']}}班</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <select name="score_report_terms_id" class='form-control'>
+                <option>请先选择班级</option>
+            </select>
+        </div>
     </div>
     <div id="toolbar">
         <button class="btn btn-success" id="export-score-report-btn">导出成绩</button>
-        <button class="btn btn-success" id="email-all-out-btn">发送所有邮件</button>
+        <!-- <button class="btn btn-success" id="email-all-out-btn">发送所有邮件</button> -->
     </div>
     <table id="score-report" class="table table-condensed table-responsive">
         <thead>

@@ -22,50 +22,22 @@
     </div>
     <div class="row row-cols-1 row-cols-md-4 g-2" id="posts-list">
     @foreach(@$posts as $key=>$post)
-        @php
-        if("doc" == $post->file_ext || "docx" == $post->file_ext) {
-                $post_storage_name = "images/doc.png";
-            } else if("xls" == $post->file_ext || "xlsx" == $post->file_ext) {
-                $post_storage_name = "images/xls.png";
-            } else if("ppt" == $post->file_ext || "pptx" == $post->file_ext) {
-                $post_storage_name = "images/ppt.png";
-            } else {
-                //$post_storage_name = public_path()."/posts/".$post->storage_name;
-                //$post_storage_name = env('APP_URL')."/posts/".$post->storage_name;
-                $post_storage_name = "posts/" . $schoolCode . "/" .$post->storage_name;
-                //echo public_path()."/posts/".$post->storage_name;
-            }
-            $post->studentClass = $post->grade_key . $post->class_title;
-            $gap = " ";
-            $cardCss = "text-black bg-default";
-            if (isset($post->rate)) {
-                if ("优" == $post->rate) {
-                    $cardCss = "text-white bg-success";
-                } elseif ("优+" == $post->rate) {
-                    $cardCss = "text-white bg-danger";
-                } else {
-                    $cardCss = "text-black bg-warning";
-                }
-            }
-        @endphp
         <div class="col">
-            <div class="card h-100 {{$cardCss}}"><!-- style="padding-left: 5px; padding-right: 5px;"    col-sm-3 col-xs-4-->
-                <!--<div class="{{ $cardCss }}" > style="height: 147px; padding-left: 10px; padding-right: 10px"-->
-                    <!--<div class="text-center"><img height="140px" value="{{ $post['pid'] }}" src="/imager?src={{$post_storage_name}}"></div>-->
-                <a href="/student/sb3player?postCode={{$post->post_code}}" style="padding: 5px;"><img class="card-img-top" src="/posts/yuying3/{{$post->post_code}}_c.{{$post->cover_ext}}" value="{{ $post['pid'] }}" alt="Card image cap"></a>
-                <!-- <div class="card-header bg-transparent border-success" value="{{ $post['pid'] }}"> </div> -->
-                    <!-- <div><img class="img-responsive thumb-img"  src="" alt=""></div> style="margin-top: 10px; margin-bottom: 5px;" -->
-                    <!-- <div><div></div>  </div> -->
+            <div class="card h-100">
+                @if("sb3" == $post->file_ext)
+                <a href="/student/sb3player?postCode={{$post->post_code}}" style="padding: 5px;"><img src="/posts/yuying3/{{$post->post_code}}_c.{{$post->cover_ext}}" value="{{ $post['pid'] }}" alt="Card image cap"></a>
+                @else
+                <a href="/student/imgPreview?postCode={{$post->post_code}}" style="padding: 5px;"><img src="/posts/yuying3/{{$post->post_code}}_c.{{$post->cover_ext}}" value="{{ $post['pid'] }}" alt="Card image cap"></a>
+                @endif
                 <div class="card-footer">
                     <div class="row" style="font-size: 0.8em;">
                         <div class="col">作品名称：{{ $post->lesson_title }}</div>
                     </div>
                     <div class="row" style="font-size: 0.7em;">
-                        <div class="col">创作者：{{ $post->studentClass }} {{ $post->username }}</div>
+                        <div class="col">创作者：{{ $post->grade_key }}{{ $post->class_title }} {{ $post->username }}</div>
                     </div>
                 </div>
                 <input type="hidden" name="postInfo" value="{{ $post->studentClass }}班">
-                <!--</div>-->
             </div>
         </div>
     @endforeach

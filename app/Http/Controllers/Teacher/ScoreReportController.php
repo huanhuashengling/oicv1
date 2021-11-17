@@ -28,14 +28,7 @@ class ScoreReportController extends Controller
         $userId = auth()->guard('teacher')->id();
         $teacher = Teacher::find($userId);
         $sclasses = Sclass::where(["is_graduated" => 0, "schools_id" => $teacher->schools_id])->get();
-        $classData = [];
-        array_push($classData, "请选择班级");
-        foreach ($sclasses as $key => $sclass) {
-            // $dateDiff = date_diff($sclass['enter_school_year']."0801", date('y', time()).date('m',time())."01");
-            // dd($dateDiff);
-            $classData[$sclass['id']] = $sclass['enter_school_year'] . "级" . $sclass['class_title'] . "班";
-        }
-        return view('teacher/scoreReport/index', compact('classData'));
+        return view('teacher/scoreReport/index', compact('sclasses'));
     }
 
     public function getSclassTermsList(Request $request) {
