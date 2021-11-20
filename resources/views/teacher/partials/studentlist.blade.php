@@ -19,7 +19,7 @@
     <div class="col">
         <div class="card h-100">
             <a href="/teacher/sb3player?postCode={{$student->post_code}}" target="_blank" style="padding: 5px;">
-                <img class="card-img-top" value="{{ $student->posts_id }}" src="/posts/yuying3/{{$student->post_code}}_c.{{$student->cover_ext}}" alt=""></a>
+                <img class="card-img-top" value="{{ $student->posts_id }}" class="img-fluid" src="/posts/yuying3/{{$student->post_code}}_c.{{$student->cover_ext}}" alt=""></a>
 
             <div class="card-footer">
                 <div class="row">

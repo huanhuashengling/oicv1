@@ -25,9 +25,9 @@
         <div class="col">
             <div class="card h-100">
                 @if("sb3" == $post->file_ext)
-                <a href="/student/sb3player?postCode={{$post->post_code}}" style="padding: 5px;"><img src="/posts/yuying3/{{$post->post_code}}_c.{{$post->cover_ext}}" value="{{ $post['pid'] }}" alt="Card image cap"></a>
+                <a href="/student/sb3player?postCode={{$post->post_code}}" style="padding: 5px;"><img src="/posts/yuying3/{{$post->post_code}}_c.{{$post->cover_ext}}" value="{{ $post['pid'] }}" class="img-fluid" alt="Card image cap"></a>
                 @else
-                <a href="/student/imgPreview?postCode={{$post->post_code}}" style="padding: 5px;"><img src="/posts/yuying3/{{$post->post_code}}_c.{{$post->cover_ext}}" value="{{ $post['pid'] }}" alt="Card image cap"></a>
+                <a href="/student/imgPreview?postCode={{$post->post_code}}" style="padding: 5px;"><img src="/posts/yuying3/{{$post->post_code}}_c.{{$post->cover_ext}}" class="img-fluid" value="{{ $post['pid'] }}" alt="Card image cap"></a>
                 @endif
                 <div class="card-footer">
                     <div class="row" style="font-size: 0.8em;">
