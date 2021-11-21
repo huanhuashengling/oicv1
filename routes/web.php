@@ -80,6 +80,8 @@ Route::group(['middleware' => 'auth.teacher', 'prefix' => 'teacher','namespace' 
     Route::post('openUnit', 'UnitController@openUnit');
 
     $router->get('sb3player', 'HomeController@sb3player');
+    $router->get('imgPreview', 'HomeController@imgPreview');
+    
 
 });
 

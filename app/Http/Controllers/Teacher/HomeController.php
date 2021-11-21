@@ -83,7 +83,7 @@ class HomeController extends Controller
         ->where(['lesson_logs.teachers_id' => $userId, 'lesson_logs.status' => 'open', 'terms.is_current' => 1])->first();
         // dd($lessonLog);die();
         if ("group" == $request->get("order")) {
-            $students = DB::table('students')->select('students.id', 'students.username', 'posts.cover_ext', 'posts.post_code', 'comments.content', 'post_rates.rate', 'groups.order_num', 'posts.id as posts_id', DB::raw("COUNT(`marks`.`id`) as mark_num"))
+            $students = DB::table('students')->select('students.id', 'students.username', 'posts.cover_ext', 'posts.file_ext', 'posts.export_name', 'posts.post_code', 'comments.content', 'post_rates.rate', 'groups.order_num', 'posts.id as posts_id', DB::raw("COUNT(`marks`.`id`) as mark_num"))
             ->leftJoin('posts', 'posts.students_id', '=', 'students.id')
             ->leftJoin('post_rates', 'post_rates.posts_id', '=', 'posts.id')
             ->leftJoin('groups', 'groups.id', '=', 'students.groups_id')
@@ -95,7 +95,7 @@ class HomeController extends Controller
             ->orderBy('groups.order_num', "ASC")->get();
             
         } else {
-            $students = DB::table('students')->select('students.id', 'students.username', 'posts.cover_ext', 'posts.post_code', 'comments.content', 'post_rates.rate', 'posts.id as posts_id', DB::raw("COUNT(`marks`.`id`) as mark_num"))
+            $students = DB::table('students')->select('students.id', 'students.username', 'posts.cover_ext', 'posts.file_ext', 'posts.export_name', 'posts.post_code', 'comments.content', 'post_rates.rate', 'posts.id as posts_id', DB::raw("COUNT(`marks`.`id`) as mark_num"))
             ->leftJoin('posts', 'posts.students_id', '=', 'students.id')
             ->leftJoin('post_rates', 'post_rates.posts_id', '=', 'posts.id')
             ->leftJoin('comments', 'comments.posts_id', '=', 'posts.id')
@@ -106,7 +106,6 @@ class HomeController extends Controller
             ->orderBy(DB::raw('convert(students.username using gbk)'), "ASC")->get();
         }
 
-        
         
         // dd($lessonLog);
         $unPostStudentName = [];
@@ -126,6 +125,11 @@ class HomeController extends Controller
         $allCount = count($allStudentsList);
         $py = new pinyinfirstchar();
         return view('teacher/takeclass', compact('students', 'lessonLog', 'py', 'allCount', 'unPostStudentName', 'schoolCode'));
+    }
+
+    public function imgPreview(Request $request) {
+        $postCode = $request->get("postCode");
+        return view('teacher/imgPreview', compact("postCode"));
     }
 
     public function updateRate(Request $request)
