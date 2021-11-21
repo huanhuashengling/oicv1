@@ -165,7 +165,7 @@ class LessonLogController extends Controller
         $postedCount = $allCount-$unpostCount;
         $cardHeadStr = "(全部".$allCount.")"." "."(已交".$postedCount.")"." "."(未交".$unpostCount.")";
         
-        $returnHtml = "<div class='card card-success'><div class='card-header'><h4>".$cardHeadStr."</h4></div><div class='card-body'>" . $this->buildStudentPostsList($students) . " </div><div class='card-footer'><h4>".$unPostStudentNameStr."</h4></div></div>";
+        $returnHtml = "<div class='card card-success'><div class='card-header'>".$cardHeadStr."</div><div class='card-body'><div class='row row-cols-1 row-cols-md-5 g-2'>" . $this->buildStudentPostsList($students) . " </div></div><div class='card-footer'>".$unPostStudentNameStr."</div></div>";
             
         $returnHtml .= "<input type='hidden' id='lesson-log-id' value='" . $lessonLog['id'] . "'>";
         //$returnHtml .= "<div class='card card-default'><div class='card-heading'><div class='card-title'><button class='btn btn-default' id='update-rethink'>点击记录教学反思</button></div></div><div class='card-body'><textarea class='form-control' rows='5' id='rethink' name='rethink'>" . $lessonLog['rethink'] . "</textarea></div></div>";
@@ -197,7 +197,12 @@ class LessonLogController extends Controller
                 $commentStr = "/评";
             }
             $marksNum = isset($student->mark_num)?$student->mark_num:"";
-            $returnHtml .= "<div class='col-md-2 col-sm-4 col-xs-6' style='padding-left: 5px; padding-right: 5px;'><div class='alert " . $postCss . "' style='padding: 5px;'><div><img class='img-responsive post-btn center-block' value='". $student->posts_id . "' src='/posts/yuying3/" . $student->post_code . "_c.". $student->cover_ext ."' alt=''></div><div><h3 style='margin-top: 10px;'>" . $py->getFirstchar($student->username) . "<small>" . $student->username . "<small></small><span class='text-right'> " . $ratestr . "" . $marksNum . $commentStr . "</span></small></h3></div></div></div>";
+            if ("sb3" == $student->file_ext) {
+                $returnHtml .= "<div class='col'><div class='card h-100'><a href='/teacher/sb3player?postCode=" . $student->post_code . "' target='_blank' style='padding: 5px;'><img class='img-fluid card-img-top center-block' value='". $student->posts_id . "' src='/posts/yuying3/" . $student->post_code . "_c.". $student->cover_ext ."' alt=''></a><div class='card-footer'><div class='row'><div class='col'>" . $py->getFirstchar($student->username) . " " . $student->username . "</div><div class='col'><span class='text-right'> " . $ratestr . "" . $marksNum . $commentStr . "</span></div></div></div></div></div>";
+            } else {
+                $returnHtml .= "<div class='col'><div class='card h-100'><a href='/teacher/imgPreview?postCode=" . $student->post_code . "' target='_blank' style='padding: 5px;'><img class='img-fluid card-img-top center-block' value='". $student->posts_id . "' src='/posts/yuying3/" . $student->post_code . "_c.". $student->cover_ext ."' alt=''></a><div class='card-footer'><div class='row'><div class='col'>" . $py->getFirstchar($student->username) . " " . $student->username . "</div><div class='col'><span class='text-right'> " . $ratestr . "" . $marksNum . $commentStr . "</span></div></div></div></div></div>";
+            }
+            
         }
         return $returnHtml;
     }
