@@ -69,9 +69,6 @@
                 <th data-field="reportText" data-visible="false">
                   学期分数报告
               </th>
-              <th data-field="users_id" data-formatter="emailCol" data-events="emailActionEvents" data-visible="false">
-                  发送
-              </th>
             </tr>
         </thead>
     </table>
