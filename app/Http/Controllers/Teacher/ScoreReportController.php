@@ -110,11 +110,11 @@ class ScoreReportController extends Controller
             $tData['rateYouNum'] = 0;
             $tData['rateDaiWanNum'] = 0;
             foreach ($rates as $key => $rate) {
-                if ("优+" == $rate->rate) {
+                if (1 == $rate->rate) {
                     $tData['rateYouJiaNum'] ++;
-                } elseif ("优" == $rate->rate) {
+                } elseif (2 == $rate->rate) {
                     $tData['rateYouNum'] ++;
-                } elseif ("待完" == $rate->rate) {
+                } elseif (3 == $rate->rate) {
                     $tData['rateDaiWanNum'] ++;
                 }
             }
