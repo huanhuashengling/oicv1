@@ -35,7 +35,7 @@
     <div class="col">
       <div class="card">
         <div class="card-body">
-          <img id="imgPreview" scr="" />
+          <img class="img-fluid" id="imgPreview" scr="" />
         </div>
         <div class="card-footer">
           <div class="row">
