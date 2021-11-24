@@ -32,7 +32,7 @@
   </div>
 
   <div class="row">
-    <div class="col">
+    <div class="col-8">
       <div class="card">
         <div class="card-body">
           <img class="img-fluid" id="imgPreview" scr="" />
@@ -54,7 +54,7 @@
       </div>
     </div>
     <br />
-    <div class="col">
+    <div class="col-4">
       <div class="card">
         <div class="card-header">
           作品介绍
