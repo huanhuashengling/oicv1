@@ -1,6 +1,7 @@
 @extends('layouts.teacher')
 @include('markdown::encode',['editors'=>['test-editormd']])
 @section('content')
+<?php echo phpinfo(); ?>
 <div class="container">
     <div class="row">
         <div class="col-10 offset-md-1">
