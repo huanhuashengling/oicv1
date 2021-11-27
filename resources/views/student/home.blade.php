@@ -1,9 +1,13 @@
 @extends('layouts.student')
 
 @section('content')
-
+<style type="text/css">
+  .markdown-body.editormd-preview-container p img {
+    width:900px;
+  }
+</style>
 <div class="container">
-  @if (0 < $unPostedLessonLogsNum)
+  @if (0 > $unPostedLessonLogsNum)
       <div class="alert alert-danger">
         <div><small>你之前还有</small><strong>{{$unPostedLessonLogsNum}}</strong><small>节课没有提交作业，请记得</small><a href="/student/posts">点击这里</a><small>补交作业！</small></div>
       </div>
@@ -58,17 +62,21 @@
           <p>{!! Session::get('danger') !!}</p>
         </div>
       @endif
-
-      @if('sb3' == $lesson['allow_post_file_types'])
-        <a class="btn btn-primary" href="/scratch3/index.html?code={{$JWTToken}}" target="_blank">打开在线编辑窗口</a>
-      @else
-        <div id="file-errors"></div>
-        <div id="caption-info"></div>
-        <form role="form" method='POST' files=true>
-          <input type="hidden" name="_token" value="{{ csrf_token() }}">
-          <input type="file" class="form-control" name="source" id="input-zh">
-        </form>
-      @endif
+      <div class="card" style="margin-top: 20px">
+        <div class="card-header bg-primary text-white text-center">作业提交区</div>
+        <div class="card-body">
+            @if('sb3' == $lesson['allow_post_file_types'])
+              <a class="btn btn-primary" href="/scratch3/index.html?code={{$JWTToken}}" target="_blank">打开在线编辑窗口</a>
+            @else
+              <div id="file-errors"></div>
+              <div id="caption-info"></div>
+              <form role="form" method='POST' files=true>
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type="file" class="form-control" name="source" id="input-zh">
+              </form>
+            @endif
+        </div> 
+      </div>
     </div>
 
   @endif

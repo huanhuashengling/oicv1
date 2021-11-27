@@ -38,7 +38,7 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script> -->
     <style type="text/css">
       .container {
-        width: 850px;
+        width: 1000px;
       }
 
       .fill-red-color {
