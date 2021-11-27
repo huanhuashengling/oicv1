@@ -76,7 +76,16 @@ class HomeController extends Controller
         $post = "";
         if ($lessonLog) {
             $lesson = Lesson::where(['id' => $lessonLog['lessons_id']])->first();
+            if(strpos($lesson->help_md_doc, "10.115.3.153")) {
+              $lesson->help_md_doc = str_replace("10.115.3.153", $_SERVER['HTTP_HOST'], $lesson->help_md_doc);
+            }
+            // echo $lesson->help_md_doc;
+            //http://119.91.154.62:7002/
+            //http://10.115.3.153/
+            //http://127.0.0.1:8000.115.3.153/
             $lesson->help_md_doc = MarkdownEditor::parse($lesson->help_md_doc);
+
+            // echo($_SERVER['HTTP_HOST']);
             $sclass = Sclass::where(['id' => $lessonLog['sclasses_id']])->first();
 
             $post = Post::where(['lesson_logs_id' => $lessonLog['id'], "students_id" => $id])->orderBy('id', 'desc')->first();

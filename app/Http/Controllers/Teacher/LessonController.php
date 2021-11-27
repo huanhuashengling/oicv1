@@ -137,6 +137,9 @@ class LessonController extends Controller
     {
         $lessonsId = $request->get('lessonsId');
         $lesson = Lesson::find($lessonsId);
+        if(strpos($lesson->help_md_doc, "10.115.3.153")) {
+          $lesson->help_md_doc = str_replace("10.115.3.153", $_SERVER['HTTP_HOST'], $lesson->help_md_doc);
+        }
         $lesson->help_md_doc = MarkdownEditor::parse($lesson->help_md_doc);
         return $lesson;
     }
