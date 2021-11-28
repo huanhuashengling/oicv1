@@ -72,7 +72,11 @@ class UserController extends ApiController
         if ($post) {
             $student["post_path"] = "/posts/yuying3/" . $post->post_code . "." . $post->file_ext;
         } else {
-            $student["post_path"] = "/project/blank.sb3";
+            if ($lesson->default_sb3_name) {
+                $student["post_path"] = "/project/" . $lesson->default_sb3_name . ".sb3";
+            } else {
+                $student["post_path"] = "/project/blank.sb3";
+            }
         }
 
         return $this->success(new UserResource($student));
