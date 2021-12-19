@@ -2,9 +2,9 @@
 
 @section('content')
 <style type="text/css">
-  .markdown-body.editormd-preview-container p img {
+  /*.markdown-body.editormd-preview-container p img {
     width:900px;
-  }
+  }*/
 </style>
 <div class="container">
   @if (0 > $unPostedLessonLogsNum)
@@ -29,28 +29,19 @@
       <p>你可以耐心等待或者尝试<a href="/student">刷新</a>一下页面，你也回顾<a href="/student/posts">以前交的作业</a>或者<a href="/student/classmate">其他同学的作业</a>。</p>
     </div>
   @else
-    @if ($post)
-      <input id="posted-path" value="/posts/yuying3/{{ $post->export_name }}" hidden />
-    @endif
     <input type="hidden" id="lesson_logs_id" value="{{$lessonLog['id']}}">
-    <div class="accordion" id="accordionExample">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            课题：{{ $lesson['title'] }}<small>({{ $lesson['subtitle'] }})</small>
-          </button>
-        </h2>
-        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-          <div class="accordion-body">
-            <div class="markdown-body editormd-preview-container" previewcontainer="true" style="padding: 20px;">
-              {!! $lesson['help_md_doc'] !!}
+    <select class="form-select mb-3" id="lesson-select">
+      @foreach ($allLessonData as $lessonData)
+        <option {{$lessonData->selected}} value={{$lessonData->lessons_id}} lessonlogsid={{$lessonData->lesson_logs_id}}>{{$lessonData->curr_str}}第{{$lessonData->order}}课：{{$lessonData->title}}({{$lessonData->subtitle}}) --------{{$lessonData->finished_status}}</option>
+      @endforeach
+    </select>
+
+      <div class="card">
+          <div class="card-body">
+            <div class="markdown-body editormd-preview-container" previewcontainer="true" style="padding: 20px;" id="md-content">
             </div>
-            
           </div>
-        </div>
       </div>
-    </div>
-    <div>
       @if(Session::has('success'))
         <div class="alert alert-success">
           <p>{!! Session::get('success') !!}</p>
@@ -65,16 +56,17 @@
       <div class="card" style="margin-top: 20px">
         <div class="card-header bg-primary text-white text-center">作业提交区</div>
         <div class="card-body">
-            @if('sb3' == $lesson['allow_post_file_types'])
-              <a class="btn btn-primary" href="/scratch3/index.html?code={{$JWTToken}}" target="_blank">打开在线编辑窗口</a>
-            @else
-              <div id="file-errors"></div>
-              <div id="caption-info"></div>
-              <form role="form" method='POST' files=true>
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type="file" class="form-control" name="source" id="input-zh">
-              </form>
-            @endif
+              <div id="sb3-area" class="d-none">
+                <a id="sb3editor-atag" class="btn btn-primary" href="" target="_blank">打开在线编辑窗口</a>
+              </div>
+              <div id="img-area" class="d-none">
+                <div id="file-errors"></div>
+                <div id="caption-info"></div>
+                <form role="form" method='POST' files=true>
+                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                  <input type="file" class="form-control" name="source" id="input-zh">
+                </form>
+              </div>
         </div> 
       </div>
     </div>

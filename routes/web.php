@@ -128,6 +128,8 @@ Route::group(['middleware' => 'auth.student', 'prefix' => 'student','namespace' 
     $router->get('open-classroom/unit/{id}', 'OpenClassroomController@unit');
     $router->get('open-classroom/lesson/{id}', 'OpenClassroomController@lesson');
 
+    $router->get('getOneLesson', 'HomeController@getOneLesson');
+
 
 
     $router->get('classmate', 'ClassmateController@classmatePost');

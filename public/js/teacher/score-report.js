@@ -43,7 +43,6 @@ $(document).ready(function() {
         }
     });
 
-
 	$('#score-report').bootstrapTable({
         method: 'post', 
         search: "true",
@@ -54,7 +53,7 @@ $(document).ready(function() {
         pageNumber: 1,
         toolbar:"#toolbar",
         showExport: true,          //是否显示导出
-        showColumns: "true",           
+        showColumns: true, 
         exportDataType: "basic",              //basic', 'all', 'selected'.
     	queryParams: function(params) {
     		var temp = { 

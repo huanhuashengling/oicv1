@@ -31,28 +31,32 @@ class HomeController extends Controller
 {
     public function index()
     {   
-        $middir = "/posts/" . $this->getSchoolCode() . "/";
         $id = auth()->guard("student")->id();
         $student = Student::find($id);
         // $JWTToken = $student->getJWTIdentifier();
-        $JWTToken = JWTAuth::fromUser($student);
         // $JWTToken = Auth::guard('api')->fromUser($student);
         $lessonLog = LessonLog::where(['sclasses_id' => $student['sclasses_id'], 'status' => 'open'])->first();
 
-        $allLessonLogs = LessonLog::select('lesson_logs.id as lesson_logs_id', 'lessons.title', 'lessons.subtitle', 'lesson_logs.updated_at')
+        $allLessonLogs = LessonLog::select('lesson_logs.id as lesson_logs_id', 'lessons.title', 'lessons.subtitle', 'lesson_logs.updated_at', 'lessons.id as lessons_id')
         ->join('lessons', 'lessons.id', '=', "lesson_logs.lessons_id")
-        ->where(['lesson_logs.sclasses_id' => $student['sclasses_id'], 'status' => 'close'])->get();
+        ->where(['lesson_logs.sclasses_id' => $student['sclasses_id']])->get();
         $unPostedLessonLogs = array();
+        $allLessonData = array();
         // dd($allLessonLogs);
         foreach ($allLessonLogs as $key => $lessonLogData) {
+          $tLesson = (object) array("order"=> $key + 1, "lesson_logs_id" =>$lessonLogData->lesson_logs_id, "lessons_id" => $lessonLogData->lessons_id, "title" => $lessonLogData->title, 'subtitle' => $lessonLogData->subtitle, 'finished_status' => "已提交", 'selected' => "", 'curr_str' => "[历史] ");
 
-          // if (2017 < date('Y',strtotime($lessonLogData['updated_at'])) && 2 < date('m',strtotime($lessonLogData['updated_at']))) {
-              $post = Post::where(['students_id' => $id, 'lesson_logs_id' => $lessonLogData['lesson_logs_id']])->first();
-            // dd($post);
-            if (!isset($post)) {
-              array_push($unPostedLessonLogs, $lessonLogData);
-            }
-          // }
+          $post = Post::where(['students_id' => $id, 'lesson_logs_id' => $lessonLogData['lesson_logs_id']])->first();
+          if (!isset($post)) {
+            array_push($unPostedLessonLogs, $lessonLogData);
+            $tLesson->finished_status = "未提交";
+          }
+
+          if ($lessonLog->id == $lessonLogData->lesson_logs_id) {
+            $tLesson->selected = "selected";
+            $tLesson->curr_str = "";
+          }
+          array_push($allLessonData, $tLesson);
         }
         $groupStudentsName = [];
         $groupName = "";
@@ -68,35 +72,39 @@ class HomeController extends Controller
               }
             }
         }
-        
         // dd($unPostedLessonLogs);
         $unPostedLessonLogsNum = count($unPostedLessonLogs);
-        $lesson = "";
-        $sclass = "";
-        $post = "";
-        if ($lessonLog) {
-            $lesson = Lesson::where(['id' => $lessonLog['lessons_id']])->first();
-            if(strpos($lesson->help_md_doc, "10.115.3.153")) {
-              $lesson->help_md_doc = str_replace("10.115.3.153", $_SERVER['HTTP_HOST'], $lesson->help_md_doc);
-            }
-            // echo $lesson->help_md_doc;
-            //http://119.91.154.62:7002/
-            //http://10.115.3.153/
-            //http://127.0.0.1:8000.115.3.153/
-            $lesson->help_md_doc = MarkdownEditor::parse($lesson->help_md_doc);
+        return view('student/home', compact('lessonLog', 'unPostedLessonLogsNum', 'groupStudentsName', 'groupName', 'allLessonData'));
+    }
 
-            // echo($_SERVER['HTTP_HOST']);
-            $sclass = Sclass::where(['id' => $lessonLog['sclasses_id']])->first();
+    public function getOneLesson(Request $request){
+      $id = auth()->guard("student")->id();
+      $student = Student::find($id);
+        // $JWTToken = $student->getJWTIdentifier();
+      $JWTToken = "";
 
-            $post = Post::where(['lesson_logs_id' => $lessonLog['id'], "students_id" => $id])->orderBy('id', 'desc')->first();
-            if ($post) {
-              // echo env('APP_URL'). $middir .$post->storage_name;
-              $post->storage_name = env('APP_URL'). $middir .$post->storage_name;
-            }
-        }
+      $lessonsId = $request->get('lessons_id');
+      $lessonLogsId = $request->get('lesson_logs_id');
 
-        // dd($post);
-        return view('student/home', compact('sclass', 'lesson', 'JWTToken', 'lessonLog', 'post', 'unPostedLessonLogsNum', 'groupStudentsName', 'groupName'));
+      $lesson = Lesson::where(['id' => $lessonsId])->first();
+
+      if ("sb3" == $lesson->allow_post_file_types) {
+        $JWTToken = JWTAuth::fromUser($student);
+      }
+
+      if(strpos($lesson->help_md_doc, "10.115.3.153")) {
+        $lesson->help_md_doc = str_replace("10.115.3.153", $_SERVER['HTTP_HOST'], $lesson->help_md_doc);
+      }
+      $lesson->help_md_doc = MarkdownEditor::parse($lesson->help_md_doc);
+      $lesson->JWTToken = $JWTToken;
+      $lesson->export_name = "";
+      // $lesson->export_name = "/posts/yuying3/619579c62d64f.png";
+      
+      $post = Post::where(['students_id' => $id, 'lesson_logs_id' => $lessonLogsId])->first();
+      if ($post) {
+        $lesson->export_name = "/posts/yuying3/" . $post->export_name;
+      }
+      return $lesson;
     }
 
     public function upload(Request $request)
