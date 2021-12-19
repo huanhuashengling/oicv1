@@ -7,11 +7,9 @@
   }*/
 </style>
 <div class="container">
-  @if (0 > $unPostedLessonLogsNum)
-      <div class="alert alert-danger">
-        <div><small>你之前还有</small><strong>{{$unPostedLessonLogsNum}}</strong><small>节课没有提交作业，请记得</small><a href="/student/posts">点击这里</a><small>补交作业！</small></div>
+      <div class="card bg-info">
+        <div class="card-body">点击下拉框，可切换课，进行作业补交 </div>
       </div>
-  @endif
 
   @if (0 < count($groupStudentsName))
     <div class="alert alert-success">
@@ -22,14 +20,6 @@
       请互相交流合作，互相帮助，完成课堂任务！</div>
     </div>
   @endif
-
-  @if (is_null($lessonLog))
-    <div class="jumbotron">
-      <h1>别着急，还未开始上课!</h1>
-      <p>你可以耐心等待或者尝试<a href="/student">刷新</a>一下页面，你也回顾<a href="/student/posts">以前交的作业</a>或者<a href="/student/classmate">其他同学的作业</a>。</p>
-    </div>
-  @else
-    <input type="hidden" id="lesson_logs_id" value="{{$lessonLog['id']}}">
     <select class="form-select mb-3" id="lesson-select">
       @foreach ($allLessonData as $lessonData)
         <option {{$lessonData->selected}} value={{$lessonData->lessons_id}} lessonlogsid={{$lessonData->lesson_logs_id}}>{{$lessonData->curr_str}}第{{$lessonData->order}}课：{{$lessonData->title}}({{$lessonData->subtitle}}) --------{{$lessonData->finished_status}}</option>
@@ -70,8 +60,6 @@
         </div> 
       </div>
     </div>
-
-  @endif
 </div>
 @endsection
 

@@ -40,7 +40,6 @@ class HomeController extends Controller
         $allLessonLogs = LessonLog::select('lesson_logs.id as lesson_logs_id', 'lessons.title', 'lessons.subtitle', 'lesson_logs.updated_at', 'lessons.id as lessons_id')
         ->join('lessons', 'lessons.id', '=', "lesson_logs.lessons_id")
         ->where(['lesson_logs.sclasses_id' => $student['sclasses_id']])->get();
-        $unPostedLessonLogs = array();
         $allLessonData = array();
         // dd($allLessonLogs);
         foreach ($allLessonLogs as $key => $lessonLogData) {
@@ -48,14 +47,15 @@ class HomeController extends Controller
 
           $post = Post::where(['students_id' => $id, 'lesson_logs_id' => $lessonLogData['lesson_logs_id']])->first();
           if (!isset($post)) {
-            array_push($unPostedLessonLogs, $lessonLogData);
             $tLesson->finished_status = "未提交";
           }
-
-          if ($lessonLog->id == $lessonLogData->lesson_logs_id) {
-            $tLesson->selected = "selected";
-            $tLesson->curr_str = "";
+          if ($lessonLog) {
+            if ($lessonLog->id == $lessonLogData->lesson_logs_id) {
+              $tLesson->selected = "selected";
+              $tLesson->curr_str = "";
+            }
           }
+          
           array_push($allLessonData, $tLesson);
         }
         $groupStudentsName = [];
@@ -72,9 +72,7 @@ class HomeController extends Controller
               }
             }
         }
-        // dd($unPostedLessonLogs);
-        $unPostedLessonLogsNum = count($unPostedLessonLogs);
-        return view('student/home', compact('lessonLog', 'unPostedLessonLogsNum', 'groupStudentsName', 'groupName', 'allLessonData'));
+        return view('student/home', compact('groupStudentsName', 'groupName', 'allLessonData'));
     }
 
     public function getOneLesson(Request $request){
