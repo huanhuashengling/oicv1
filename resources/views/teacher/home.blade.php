@@ -26,11 +26,15 @@
 
                                 <input type="hidden" name="" id="lessons-id" value="{{$chooseLessonsId}}">
                                 <input type="hidden" name="sclassesId" id="sclasses-id">
+                                <input type="hidden" name="isClub" id="is-club">
                                 <h4>{{$chooseLessonDesc}}</h4>
                             @endif
                             <p>------班级列表------</p>
                             @foreach ($classData as $key => $value)
                                 <button class="btn btn-success btn-lg class-btn col-md-3" style="margin-left: 15px; margin-bottom: 15px; width: 100px" value="{{$key}}" style="margvaluein-left: 10px; margin-bottom: 10px">{{$value}}</button>
+                            @endforeach
+                            @foreach ($clubData as $key => $value)
+                                <button class="btn btn-success btn-lg club-btn col-md-3" style="margin-left: 15px; margin-bottom: 15px; width: 100px" value="{{$key}}" style="margvaluein-left: 10px; margin-bottom: 10px">{{$value}}</button>
                             @endforeach
                             <div class="form-group col">
                                 <button class="btn btn-lg btn-primary" id="submit-btn" type="submit">开始上课</button>

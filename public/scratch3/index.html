@@ -22,6 +22,7 @@
     var userInfo = ""
     var JWTToken = "bearer" + urlParams("code");
     localStorage.setItem("pro__Access-Token", JWTToken)
+    localStorage.setItem("lessonLogsId", urlParams("llid"))
     getUserInfo();
 
     // var qn_token = getQiniuToken();
@@ -157,8 +158,7 @@
       },
       handleVmInitialized: (vm) => {
         userInfo = JSON.parse(localStorage.getItem('pro__Login_Userinfo'))
-        
-        console.log(userInfo);
+        // console.log(userInfo);
         window.vm = vm
         console.log("VM初始化完毕")
 

@@ -75,12 +75,47 @@ $(document).ready(function() {
         },
     });
 
+
+    $('#club-list').bootstrapTable({
+        method: 'post', 
+        search: "true",
+        url: "/school/getClubsData",
+        pagination:"true",
+        pageList: [10, 25, 50], 
+        pageSize: 10,
+        pageNumber: 1,
+        toolbar:"#club-toolbar",
+        queryParams: function(params) {
+            var temp = { 
+                clubs_id : 1
+            };
+            return temp;
+        },
+        clickToSelect: true,
+        columns: [{  
+                    checkbox: true  
+                },{  
+                    title: '序号',
+                    formatter: function (value, row, index) {  
+                        return index+1;  
+                    }  
+                }],
+        responseHandler: function (res) {
+            console.log(res);
+            return res;
+        },
+    });
+
     $("#add-new-sclass").click(function(e) {
         $("#add-new-sclass-modal").modal("show");
     });
 
     $("#add-new-term").click(function(e) {
         $("#add-new-term-modal").modal("show");
+    });
+
+    $("#add-new-club").click(function(e) {
+        $("#add-new-club-modal").modal("show");
     });
 
     $("#confirm-add-new-btn").click(function(e) {
@@ -137,6 +172,30 @@ $(document).ready(function() {
         // console.log($("#gender").val());
         // console.log($("#add-new-btn").val());
     });
+
+    $("#confirm-add-new-club").click(function(e) {
+        if("" == $("#club-title").val() || "" == $("#term-desc").val())
+        {
+            alert("两项都必填！");
+            return;
+        }
+        data = {
+            'club_title': $("#club-title").val(),
+            'term_desc': $("#term-desc").val(),
+            'status': "open",
+            'schools_id': $("#schools-id").val(),
+        }
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: '/school/createOneClub',
+            data: data,
+            success: function( data ) {
+                $("#add-new-club-modal").modal("hide");
+                $('#club-list').bootstrapTable('refresh');
+            }
+        });
+    });
 });
 
 function graduatedCol(value, row, index) {
@@ -153,6 +212,13 @@ function resetCol(value, row, index) {
 
 function sclassActionCol(value, row, index) {
     return [
+        ' <a class="btn btn-danger btn-sm edit">编辑</a> ',
+    ].join('');
+}
+
+function clubActionCol(value, row, index) {
+    return [
+        ' <a class="btn btn-danger btn-sm edit">关闭</a> ',
         ' <a class="btn btn-danger btn-sm edit">编辑</a> ',
     ].join('');
 }

@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth.teacher', 'prefix' => 'teacher','namespace' 
 {
     $router->get('/', 'HomeController@index');
     $router->get('takeclass', 'HomeController@takeclass');
+    $router->get('takeclubclass', 'HomeController@takeclubclass');
     $router->resource('lesson', 'LessonController');
     $router->post('getLessonPostPerSclass', 'HomeController@getLessonPostPerSclass');
 
@@ -171,11 +172,16 @@ Route::group(['middleware' => 'auth.school:school, school/login', 'prefix' => 's
     $router->post('createOneSclass', 'SclassController@createOneSclass');
     $router->post('createOneTerm', 'SclassController@createOneTerm');
 
+    $router->post('getClubsData', 'SclassController@getClubsData');
+    $router->post('createOneClub', 'SclassController@createOneClub');
+
     //student
     $router->get('students', 'StudentAccountController@index');
     $router->post('importStudents', 'StudentAccountController@importStudents')->name('school.importStudents');
     $router->post('updateStudentEmail', 'StudentAccountController@updateStudentEmail');
+    $router->post('bringStudentsIntoClub', 'StudentAccountController@bringStudentsIntoClub');
     $router->post('getStudentsData', 'StudentAccountController@getStudentsData');
+    $router->post('getClubStudentsData', 'StudentAccountController@getClubStudentsData');
     $router->post('resetStudentPassword', 'StudentAccountController@resetStudentPassword');
     $router->post('lockOneStudentAccount', 'StudentAccountController@lockOneStudentAccount');
     $router->post('unlockOneStudentAccount', 'StudentAccountController@unlockOneStudentAccount');
@@ -184,6 +190,7 @@ Route::group(['middleware' => 'auth.school:school, school/login', 'prefix' => 's
     $router->post('lockOneStudentWorkComment', 'StudentAccountController@lockOneStudentWorkComment');
     $router->post('unlockOneStudentWorkComment', 'StudentAccountController@unlockOneStudentWorkComment');
     $router->post('addMaxWorkNum', 'StudentAccountController@addMaxWorkNum');
+    $router->post('unbindClub', 'StudentAccountController@unbindClub');
 
     //group
     $router->get('groups', 'GroupController@index');

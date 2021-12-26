@@ -5,12 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LessonLog extends Model
+class Club extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'teachers_id', 'sclasses_id', 'lessons_id', 'status', 'rethink', 'is_club'
-    ];
+    protected $fillable = ['schools_id', 'club_title', 'status', 'term_desc'];
 }
-

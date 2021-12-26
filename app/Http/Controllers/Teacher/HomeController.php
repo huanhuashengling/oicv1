@@ -18,6 +18,8 @@ use App\Models\Comment;
 use App\Models\LessonLog;
 use App\Models\Mark;
 use App\Models\Term;
+use App\Models\Club;
+use App\Models\ClubStudent;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Validator;
 use \Auth;
@@ -51,6 +53,13 @@ class HomeController extends Controller
             $term = Term::where(['enter_school_year' => $sclass['enter_school_year'], 'is_current' => 1])->first();
             $classData[$sclass['id']] = $term['grade_key'] . $sclass['class_title'] . "班";
         }
+
+        $clubs = Club::where(["status" => "open", "schools_id" => $teacher->schools_id])->get();
+        $clubData = [];
+        foreach ($clubs as $key => $club) {
+            $term = Term::where(['enter_school_year' => $sclass['enter_school_year'], 'is_current' => 1])->first();
+            $clubData[$club['id']] = $club['club_title'];
+        }
         $chooseLessonDesc = "";
         if (isset($chooseLessonsId)) {
             $lesson = Lesson::find($chooseLessonsId);
@@ -67,7 +76,7 @@ class HomeController extends Controller
         //     $order++;
         // }
 
-        return view('teacher/home', compact('classData', 'chooseLessonDesc', 'chooseLessonsId'));
+        return view('teacher/home', compact('classData', 'clubData', 'chooseLessonDesc', 'chooseLessonsId'));
     }
 
     public function takeClass(Request $request)
@@ -121,10 +130,72 @@ class HomeController extends Controller
                 array_push($unPostStudentName, $studentsName->username);
             }
         }
+        $redirectUri = "takeclass";
+
         // dd($unPostStudentName);
         $allCount = count($allStudentsList);
         $py = new pinyinfirstchar();
-        return view('teacher/takeclass', compact('students', 'lessonLog', 'py', 'allCount', 'unPostStudentName', 'schoolCode'));
+        return view('teacher/takeclass', compact('students', 'lessonLog', 'py', 'allCount', 'unPostStudentName', 'schoolCode', 'redirectUri'));
+    }
+
+    public function takeClubClass(Request $request)
+    {
+        $schoolCode = $this->getSchoolCode();
+        // dd($schoolCode);
+        $userId = auth()->guard('teacher')->id();
+        $lessonLog = LessonLog::select('lesson_logs.id', 'lesson_logs.rethink', 'lesson_logs.sclasses_id', 'clubs.club_title as class_title', 'lessons.title', 'lessons.subtitle')
+        ->join("clubs", 'clubs.id', '=', 'lesson_logs.sclasses_id')
+        ->join("lessons", 'lessons.id', '=', 'lesson_logs.lessons_id')
+        ->where(['lesson_logs.teachers_id' => $userId, 'lesson_logs.status' => 'open'])->first();
+        // dd($lessonLog);die();
+        if ("group" == $request->get("order")) {
+            $students = DB::table('students')->select('students.id', 'students.username', 'posts.cover_ext', 'posts.file_ext', 'posts.export_name', 'posts.post_code', 'comments.content', 'post_rates.rate', 'groups.order_num', 'posts.id as posts_id', DB::raw("COUNT(`marks`.`id`) as mark_num"))
+            ->leftJoin('posts', 'posts.students_id', '=', 'students.id')
+            ->leftJoin('post_rates', 'post_rates.posts_id', '=', 'posts.id')
+            ->leftJoin('groups', 'groups.id', '=', 'students.groups_id')
+            ->leftJoin('comments', 'comments.posts_id', '=', 'posts.id')
+            ->leftJoin('marks', 'marks.posts_id', '=', 'posts.id')
+            ->where(["students.sclasses_id" => $lessonLog['sclasses_id'], 'posts.lesson_logs_id' => $lessonLog['id']])
+            ->where('students.is_lock', "!=", "1")
+            ->groupBy('students.id', 'students.username', 'posts.post_code', 'comments.content', 'post_rates.rate', 'posts.id')
+            ->orderBy('groups.order_num', "ASC")->get();
+            
+        } else {
+            $students = DB::table('students')->select('students.id', 'students.username', 'posts.cover_ext', 'posts.file_ext', 'posts.export_name', 'posts.post_code', 'post_rates.rate', 'posts.id as posts_id', DB::raw("COUNT(`marks`.`id`) as mark_num"))
+            ->leftJoin('posts', 'posts.students_id', '=', 'students.id')
+            ->leftJoin('post_rates', 'post_rates.posts_id', '=', 'posts.id')
+            ->leftJoin('marks', 'marks.posts_id', '=', 'posts.id')
+            ->leftJoin('club_students', 'club_students.students_id', '=', 'students.id')
+            ->where(["club_students.clubs_id" => $lessonLog['sclasses_id'], 'posts.lesson_logs_id' => $lessonLog['id']])
+            ->where('club_students.status', "=", "open")
+            ->groupBy('students.id', 'students.username', 'posts.post_code', 'post_rates.rate', 'posts.id')
+            ->orderBy(DB::raw('convert(students.username using gbk)'), "ASC")->get();
+        }
+
+        
+        // dd($lessonLog);
+        $unPostStudentName = [];
+        
+        $postedStudents = [];
+        $allStudentsList = Student::select('students.username', "club_students.*")
+        ->join("club_students", 'club_students.students_id', '=', 'students.id')
+        ->where('clubs_id', '=', $lessonLog['sclasses_id'])
+        ->where('students.is_lock', "!=", "1")
+        ->where('status', "=", "open")->get();
+
+        foreach ($students as $key => $student) {
+            array_push($postedStudents, $student->username);
+        }
+        foreach ($allStudentsList as $key => $studentsName) {
+            if (!in_array($studentsName->username, $postedStudents)) {
+                array_push($unPostStudentName, $studentsName->username);
+            }
+        }
+        $redirectUri = "takeclubclass";
+        // dd($unPostStudentName);
+        $allCount = count($allStudentsList);
+        $py = new pinyinfirstchar();
+        return view('teacher/takeclass', compact('students', 'lessonLog', 'py', 'allCount', 'unPostStudentName', 'schoolCode', "redirectUri"));
     }
 
     public function imgPreview(Request $request) {
@@ -200,6 +271,7 @@ class HomeController extends Controller
         $teachersId = Auth::guard('teacher')->id();
         $lessonLog = LessonLog::where(['lessons_id' => $request->input('lessonsId'), 
                                     'sclasses_id' => $request->input('sclassesId'), 
+                                    'is_club' => $request->input('isClub'), 
                                     'teachers_id' => $teachersId])->first();
 
         if (isset($lessonLog)) {

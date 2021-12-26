@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Sclass;
 use App\Models\Term;
+use App\Models\Club;
 
 class SclassController extends Controller
 {
@@ -54,6 +55,27 @@ class SclassController extends Controller
                 'is_current' => $request->get('is_current'),
                 'from_date' => $request->get('from_date'),
                 'to_date' => $request->get('to_date'),
+            ]);
+        } catch (Exception $e) {
+            throw new Exception("Error Processing Request", 1);
+        }
+    }
+
+    public function getClubsData()
+    {
+        $schoolsId = \Auth::guard("school")->id();
+        $clubs = Club::get();
+        return json_encode($clubs);
+    }
+
+    public function createOneClub(Request $request)
+    {
+        try {
+            $club = Club::create([
+                'schools_id' => $request->get('schools_id'),
+                'club_title' => $request->get('club_title'),
+                'status' => $request->get('status'),
+                'term_desc' => $request->get('term_desc'),
             ]);
         } catch (Exception $e) {
             throw new Exception("Error Processing Request", 1);

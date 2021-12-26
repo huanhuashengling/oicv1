@@ -21,22 +21,42 @@ $(document).ready(function() {
 		}
 		$(".class-btn").removeClass("btn-primary");
 		$(this).addClass("btn-primary");
-		$("#sclasses-id").val($(this).val());
+    $("#sclasses-id").val($(this).val());
+		// $("#is-club").val("false");
 		checkSelection();
 	});
+
+  $(".club-btn").on("click", function(e) {
+    e.preventDefault();
+    if (!$("#lessons-id").val()) {
+      alert("请先选择课程");
+      return;
+    }
+    $(".club-btn").removeClass("btn-primary");
+    $(this).addClass("btn-primary");
+    $("#sclasses-id").val($(this).val());
+    $("#is-club").val("true");
+    checkSelection();
+  });
 
 	$("#submit-btn").on("click", function(e) {
 		e.preventDefault();
 		var sclassesId = $("#sclasses-id").val();
 		var lessonsId = $("#lessons-id").val();
+    var isClub = $("#is-club").val();
+
 		// alert(sclassesId + "  "  + lessonsId);
 		$.ajax({
             type: "POST",
             url: '/teacher/createLessonLog',
-            data: {sclassesId: sclassesId, lessonsId: lessonsId},
+            data: {sclassesId: sclassesId, lessonsId: lessonsId, isClub: isClub},
             success: function( data ) {
                 if ("false" != data) {
-                  window.location.href = "/teacher/takeclass";
+                  if ("true" == isClub) {
+                    window.location.href = "/teacher/takeclubclass";
+                  } else {
+                    window.location.href = "/teacher/takeclass";
+                  }
                 }
             }
         });
@@ -44,6 +64,7 @@ $(document).ready(function() {
 });
 
 function checkSelection() {
+  var isClub = $("#is-club").val();
 	var sclassesId = $("#sclasses-id").val();
 	var lessonsId = $("#lessons-id").val();
 	if(0 !=  sclassesId && 0 != lessonsId) {
@@ -51,9 +72,9 @@ function checkSelection() {
 		$.ajax({
             type: "POST",
             url: '/teacher/getLessonLog',
-            data: {sclassesId: sclassesId, lessonsId: lessonsId},
+            data: {sclassesId: sclassesId, lessonsId: lessonsId, isClub: isClub},
             success: function( data ) {
-                // console.log(data);
+                console.log(data);
                 if ("false" != data) {
                 	alert("请注意，这节课你已经上过一次，已有"+data+"份作业，点击按钮课程将重新打开");
                 }

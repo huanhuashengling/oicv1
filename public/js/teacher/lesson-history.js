@@ -44,6 +44,18 @@ $(document).ready(function() {
         });
 	});
 
+    $("#clubs-selection").change(function(){
+        $.ajax({
+            type: "POST",
+            url: '/teacher/loadLessonLogSelection',
+            data: {terms_id: $("#term-selection").val(), sclassesId: $("#clubs-selection").val()},
+            success: function( data ) {
+                // console.log(data);
+                $("#lesson-log-selection").html(data);
+            }
+        });
+    });
+
 	$("#lesson-log-selection").change(function(){
 		// alert($("#term-selection").val());
 		$.ajax({

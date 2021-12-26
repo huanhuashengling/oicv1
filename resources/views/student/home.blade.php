@@ -21,8 +21,8 @@
     </div>
   @endif
     <select class="form-select mb-3" id="lesson-select">
-      @foreach ($allLessonData as $lessonData)
-        <option {{$lessonData->selected}} value={{$lessonData->lessons_id}} lessonlogsid={{$lessonData->lesson_logs_id}}>{{$lessonData->curr_str}}第{{$lessonData->order}}课：{{$lessonData->title}}({{$lessonData->subtitle}}) --------{{$lessonData->finished_status}}</option>
+      @foreach ($allLessonData as $lesson)
+        <option class="opt1" {{$lesson->selected}} value={{$lesson->lessons_id}} lessonlogsid={{$lesson->lesson_logs_id}}>{{$lesson->club_str}} {{$lesson->curr_str}}第{{$lesson->order}}课：{{$lesson->title}}({{$lesson->subtitle}}) --------{{$lesson->finished_status}}</option>
       @endforeach
     </select>
 

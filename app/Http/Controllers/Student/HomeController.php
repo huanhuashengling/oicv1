@@ -12,6 +12,8 @@ use App\Models\Post;
 use App\Models\Lesson;
 use App\Models\PostRate;
 use App\Models\Group;
+use App\Models\Club;
+use App\Models\ClubStudent;
 use App\Models\Comment;
 use App\Models\Mark;
 
@@ -33,17 +35,33 @@ class HomeController extends Controller
     {   
         $id = auth()->guard("student")->id();
         $student = Student::find($id);
+        $clubStudent = ClubStudent::where("students_id", "=", $id)
+        ->where("status", "=", "open")->first();
+        $sclassesId = $student->sclasses_id;
+        $tClubLessonLogs = "";
+        if ($clubStudent) {
+          $sclassesId = $clubStudent->clubs_id;
+          $tClubLessonLogs = LessonLog::select('lesson_logs.id as lesson_logs_id', 'lesson_logs.is_club', 'lessons.title', 'lessons.subtitle', 'lesson_logs.updated_at', 'lessons.id as lessons_id')
+          ->join('lessons', 'lessons.id', '=', "lesson_logs.lessons_id")
+          ->where('lesson_logs.sclasses_id', "=", $clubStudent->clubs_id)
+          ->where('lesson_logs.is_club', "=", "true")
+          ->get();
+        }
         // $JWTToken = $student->getJWTIdentifier();
         // $JWTToken = Auth::guard('api')->fromUser($student);
-        $lessonLog = LessonLog::where(['sclasses_id' => $student['sclasses_id'], 'status' => 'open'])->first();
+        $lessonLog = LessonLog::where(['sclasses_id' => $sclassesId, 'status' => 'open'])->first();
 
-        $allLessonLogs = LessonLog::select('lesson_logs.id as lesson_logs_id', 'lessons.title', 'lessons.subtitle', 'lesson_logs.updated_at', 'lessons.id as lessons_id')
+        $tLessonLogs = LessonLog::select('lesson_logs.id as lesson_logs_id', 'lesson_logs.is_club', 'lessons.title', 'lessons.subtitle', 'lesson_logs.updated_at', 'lessons.id as lessons_id')
         ->join('lessons', 'lessons.id', '=', "lesson_logs.lessons_id")
-        ->where(['lesson_logs.sclasses_id' => $student['sclasses_id']])->get();
+        ->where(['lesson_logs.sclasses_id' => $student->sclasses_id])->get();
+        
+        $allLessonLogs = $tLessonLogs->concat($tClubLessonLogs);
+        
         $allLessonData = array();
         // dd($allLessonLogs);
         foreach ($allLessonLogs as $key => $lessonLogData) {
-          $tLesson = (object) array("order"=> $key + 1, "lesson_logs_id" =>$lessonLogData->lesson_logs_id, "lessons_id" => $lessonLogData->lessons_id, "title" => $lessonLogData->title, 'subtitle' => $lessonLogData->subtitle, 'finished_status' => "已提交", 'selected' => "", 'curr_str' => "[历史] ");
+          $clubStr = ("true" == $lessonLogData->is_club)?"*社团* ":"";
+          $tLesson = (object) array("order"=> $key + 1, "lesson_logs_id" =>$lessonLogData->lesson_logs_id, "lessons_id" => $lessonLogData->lessons_id, "title" => $lessonLogData->title, 'subtitle' => $lessonLogData->subtitle, 'finished_status' => "已提交", 'selected' => "", 'curr_str' => "[历史] ", "club_str" => $clubStr);
 
           $post = Post::where(['students_id' => $id, 'lesson_logs_id' => $lessonLogData['lesson_logs_id']])->first();
           if (!isset($post)) {

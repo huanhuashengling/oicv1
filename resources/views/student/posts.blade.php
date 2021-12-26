@@ -38,6 +38,9 @@
                 <th data-field="postState" data-sortable="true">
                     状态
                 </th>
+                <th data-field="postType" data-sortable="true">
+                    类型
+                </th>
                 <th data-field="rateScore" data-sortable="true">
                     等第分
                 </th>

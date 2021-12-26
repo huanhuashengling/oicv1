@@ -10,6 +10,8 @@ use App\Models\Term;
 use App\Models\Sclass;
 use App\Models\School;
 use App\Models\Teacher;
+use App\Models\Student;
+use App\Models\Club;
 use \DB;
 use \Auth;
 use App\Http\Requests\LessonLogRequest;
@@ -22,6 +24,7 @@ class LessonLogController extends Controller
         //TODO DO not readd the same lessonlog with the sanme teacher classe and lesson
         $teachersId = \Auth::guard("teacher")->id();
         $sclassesId = $request->get('sclassesId');
+        $isClub = $request->get('isClub');
         $lessonsId = $request->session()->get('chooseLessonsId');
 
         if (0 == $sclassesId) {
@@ -30,7 +33,7 @@ class LessonLogController extends Controller
         if (!isset($lessonsId)) {
             return redirect()->back()->withInput()->withErrors('请选择课程！');
         }
-        $oldlLessonLog = LessonLog::where(['teachers_id' => $teachersId, "sclasses_id" => $sclassesId, "lessons_id" => $lessonsId])->first();
+        $oldlLessonLog = LessonLog::where(['teachers_id' => $teachersId, "sclasses_id" => $sclassesId, "lessons_id" => $lessonsId, "is_club" => $isClub])->first();
             
 
 
@@ -38,7 +41,11 @@ class LessonLogController extends Controller
             $request->session()->forget('chooseLessonsId');
             $oldlLessonLog->status = 'open';
             $oldlLessonLog->update();
-            return redirect('teacher/takeclass');
+            if ("true" == $isClub) {
+                return redirect('teacher/takeClubClass');
+            } else {
+                return redirect('teacher/takeclass');
+            }
         }
 
         
@@ -46,13 +53,18 @@ class LessonLogController extends Controller
 
         $lessonLog->teachers_id = \Auth::guard("teacher")->id();
         $lessonLog->sclasses_id = $sclassesId;
+        $lessonLog->is_club = $isClub;
         $lessonLog->lessons_id = $lessonsId;
         $lessonLog->rethink = "";
         $lessonLog->status = 'open';
         // dd($lessonLog);die();
         if ($lessonLog->save()) {
             $request->session()->forget('chooseLessonsId');
-            return redirect('teacher/takeclass');
+            if ("true" == $isClub) {
+                return redirect('teacher/takeClubClass');
+            } else {
+                return redirect('teacher/takeclass');
+            }
         } else {
             return redirect()->back()->withInput()->withErrors('保存失败！');
         }
@@ -88,8 +100,13 @@ class LessonLogController extends Controller
 
     public function listLessonLog()
     {
-        $terms = Term::orderBy("enter_school_year", "desc")->get();
-        return view('teacher/lesson/lesson-log', compact('terms'));
+        $teacher = Teacher::find(Auth::guard("teacher")->id());
+
+        $clubData = Club::select("id", "club_title as class_title", "term_desc")
+        ->where(["schools_id" => $teacher->schools_id])->get();
+
+        $terms = Term::where(["is_current" => 1])->orderBy("enter_school_year", "desc")->get();
+        return view('teacher/lesson/lesson-log', compact('clubData', 'terms'));
     }
 
     public function loadSclassSelection(Request $request)
@@ -104,12 +121,19 @@ class LessonLogController extends Controller
 
     public function loadLessonLogSelection(Request $request)
     {
+        $matchThese = [];
         $term = Term::find($request->get('terms_id'));
-        $from = date('Y-m-d', strtotime($term->from_date)); 
-        $to = date('Y-m-d', strtotime($term->to_date));
+            $from = date('Y-m-d', strtotime($term->from_date)); 
+            $to = date('Y-m-d', strtotime($term->to_date));
+        if($request->get('terms_id')) {
+            $sclass = Sclass::find($request->get('sclassesId'));
+            // $matchThese = ['field' => 'value', 'another_field' => 'another_value', ...];
 
-        $sclass = Sclass::find($request->get('sclassesId'));
-
+        } else {
+            $sclass = Club::where(['status' => 'open'])->find($request->get('sclassesId'));
+            $matchThese = ["lesson_logs.is_club" => "true"];
+        }
+        
         $lessonLogs = LessonLog::select('lesson_logs.id', 'lessons.title', 'lessons.subtitle', 'teachers.username', 'lesson_logs.updated_at', DB::raw("COUNT(`posts`.`id`) as post_num"))
             ->leftJoin('lessons', function($join){
               $join->on('lessons.id', '=', 'lesson_logs.lessons_id');
@@ -122,6 +146,7 @@ class LessonLogController extends Controller
             })
             ->groupBy('lesson_logs.id', 'lessons.title', 'lessons.subtitle', 'teachers.username', 'lesson_logs.updated_at')
             ->whereBetween('lesson_logs.created_at', array($from, $to))
+            ->where($matchThese)
             ->where(['lesson_logs.sclasses_id' => $sclass->id])->get();
 
         return $this->buildLessonLogSelectionHtml($lessonLogs);
@@ -138,7 +163,7 @@ class LessonLogController extends Controller
         ->leftJoin('post_rates', 'post_rates.posts_id', '=', 'posts.id')
         ->leftJoin('comments', 'comments.posts_id', '=', 'posts.id')
         ->leftJoin('marks', 'marks.posts_id', '=', 'posts.id')
-        ->where(["students.sclasses_id" => $lessonLog['sclasses_id'], 'posts.lesson_logs_id' => $lessonLog['id']])
+        ->where(['posts.lesson_logs_id' => $lessonLog['id']])
         ->where('students.is_lock', "!=", "1")
         ->groupBy('students.id', 'students.username', 'posts.export_name', 'post_rates.rate','posts.cover_ext', 'posts.post_code', 'posts.id')
         ->orderBy(DB::raw('convert(students.username using gbk)'), "ASC")->get();
@@ -146,8 +171,18 @@ class LessonLogController extends Controller
         $unPostStudentNameStr = "未交名单:";
         
         $postedStudents = [];
-        $allStudentsList = DB::table('students')->select('students.username')
-        ->where(['students.sclasses_id' => $lessonLog['sclasses_id']])->where('students.is_lock', "!=", "1")->get();
+
+        if ("true" == $lessonLog->is_club) {
+            $allStudentsList = Student::select("students.id", "students.username")
+            ->join("club_students", "club_students.students_id", "=", "students.id")
+            ->where("club_students.clubs_id", "=", $lessonLog->sclasses_id)
+            ->get();
+        } else {
+            $allStudentsList = DB::table('students')->select('students.username')
+            ->where(['students.sclasses_id' => $lessonLog['sclasses_id']])->where('students.is_lock', "!=", "1")->get();
+        }
+
+        
         foreach ($students as $key => $student) {
             array_push($postedStudents, $student->username);
         }

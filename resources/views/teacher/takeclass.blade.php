@@ -30,14 +30,14 @@
         <div class="card card-default">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-1">{{ $lessonLog['grade_key'] }}{{ $lessonLog['class_title'] }}班</div>
+                    <div class="col-2">{{ $lessonLog['grade_key'] }}{{ $lessonLog['class_title'] }}班</div>
                     <div class="col-4"><small></small>{{ $lessonLog['title'] }}<small>({{ $lessonLog['subtitle'] }})</small></div>
                     
                     <!-- <div class="col-2 "><button class='btn btn-info', id='sort-by-name'>姓名排序</button></div>-->
-                    <div class="col-4"><button class='btn btn-danger', id='close-lesson-log'>结束上课</button> <a href="/teacher/takeclass" class="btn btn-warning">刷新作业</a> <a href="/teacher/takeclass?order=group" class="btn btn-warning">按组刷新</a></div>
+                    <div class="col-4"><button class='btn btn-danger', id='close-lesson-log'>结束上课</button> <a href="/teacher/{{$redirectUri}}" class="btn btn-warning">刷新作业</a> <a href="/teacher/{{$redirectUri}}?order=group" class="btn btn-warning">按组刷新</a></div>
                     <!-- <div class="col-2"><a href="/teacher/takeclass" class="btn btn-warning">刷新作业</a></div> -->
                     <!-- <div class="col-2"><a href="/teacher/takeclass?order=group" class="btn btn-warning">按组刷新</a></div> -->
-                    <div class="col-3">(全部{{$allCount}}) (已交{{$postedCount}}) (未交{{$unpostCount}})</div>
+                    <div class="col-2">(全部{{$allCount}}) (已交{{$postedCount}}) (未交{{$unpostCount}})</div>
                 </div>
             </div>
             <div class="card-body">

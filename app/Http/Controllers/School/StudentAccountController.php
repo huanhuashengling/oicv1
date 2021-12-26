@@ -13,6 +13,8 @@ use App\Models\Lesson;
 use App\Models\Post;
 use App\Models\Mark;
 use App\Models\Term;
+use App\Models\Club;
+use App\Models\ClubStudent;
 use Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
@@ -38,12 +40,19 @@ class StudentAccountController extends Controller
                               ->groupBy('sclasses.class_title', 'sclasses.enter_school_year', 'sclasses.id')
                               ->orderBy('sclasses.id')
                               ->get();
+
+        $clubs = Club::all();
+        foreach ($clubs as $key => $club) {
+            $clubStudent = ClubStudent::where(["clubs_id" => $club->id])->count();
+            $club->club_student_num = $clubStudent;
+        }
+
         foreach ($sclassesData as $key => $item) {
             $sclassesData[$key]["title"] = $item['enter_school_year'] . "级" . $item["class_title"] . "班";
         }
-        // dd($sclassesData);
+        // dd($clubs);
 
-        return view('school/student-account/index', compact('sclassesData'));
+        return view('school/student-account/index', compact('sclassesData', "clubs"));
     }
 
     public function importStudents(Request $request)
@@ -83,6 +92,45 @@ class StudentAccountController extends Controller
             })
             ->where(['sclasses_id' => $sclass->id])->get();
             return json_encode($students);
+        } else {
+            return "false";
+        }
+    }
+
+    public function getClubStudentsData(Request $request) {
+        $club = Club::find($request->get('clubs_id'));
+
+        if (isset($club)) {
+        // dd($club);
+
+            $clubStudents = ClubStudent::where(["clubs_id" => $club->id])->get();
+            $studentData = array();
+            foreach ($clubStudents as $key => $clubStudent) {
+                $student = Student::find($clubStudent->students_id);
+                $sclass = Sclass::find($student->sclasses_id);
+                $student->studentsId = $student->id;
+                $student->clubsId = $club->id;
+                $student->class_title = $sclass->class_title;
+                $student->enter_school_year = $sclass->enter_school_year;
+                array_push($studentData, $student);
+            }
+            return json_encode($studentData);
+        } else {
+            return "false";
+        }
+    }
+
+    public function unbindClub(Request $request) {
+        $studentsId = $request->get('users_id');
+        $clubsId = $request->get('clubs_id');
+        $clubStudent = ClubStudent::where(["clubs_id" => $clubsId])
+                        ->where(["students_id" => $studentsId])
+                        ->first();
+
+        if (isset($clubStudent)) {
+            $clubStudent->delete();
+            // ClubStudent::delete($clubStudent->id);
+            return "true";
         } else {
             return "false";
         }
@@ -197,6 +245,38 @@ class StudentAccountController extends Controller
             $student->save();
         } catch (Exception $e) {
             throw new Exception("Error Processing Request", 1);
+        }
+    }
+
+    public function bringStudentsIntoClub(Request $request) {
+        $club_id = $request->get("club_id");
+        $student_id_str = $request->get("student_id_list");
+        // echo($club_id);
+        // dd($student_id_str);
+        if ("" == $student_id_str) {
+            return;
+        }
+        $studentIdList = explode(",", $student_id_str);
+        foreach ($studentIdList as $key => $studentId) {
+            echo($club_id);
+        echo($studentId);
+            // try {
+                $clubStudent = ClubStudent::where(['students_id' => $studentId])
+                ->where(['clubs_id' => $club_id])
+                ->first();
+                if(isset($clubStudent)) {
+                    return;
+                }
+                // dd($clubStudent);
+
+                $clubStudent = ClubStudent::create([
+                    'students_id' => $studentId,
+                    'clubs_id' => $club_id,
+                    'status' => "open",
+                ]);
+            // } catch (Exception $e) {
+            //     throw new Exception("Error Processing Request", 1);
+            // }
         }
     }
 }

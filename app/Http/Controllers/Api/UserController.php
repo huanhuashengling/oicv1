@@ -54,20 +54,24 @@ class UserController extends ApiController
         return $this->success('退出成功...');
     }
     //返回当前登录用户信息
-    public function info(){
+    public function info(Request $request){
+        $lessonLogsId = $request->get("lessonLogsId");
         $student = Auth::guard('api')->user();
-        $lessonLog = LessonLog::select("lesson_logs.id as lesson_logs_id", "lessons_id")
-              ->leftJoin('sclasses', 'lesson_logs.sclasses_id', '=', "sclasses.id")
-              ->where('sclasses.id', '=', $student->sclasses_id)
-              ->where("lesson_logs.status", '=', 'open')->first();
+        // $lessonLog = LessonLog::select("lesson_logs.id as lesson_logs_id", "lessons_id")
+        //       ->leftJoin('sclasses', 'lesson_logs.sclasses_id', '=', "sclasses.id")
+        //       ->where('sclasses.id', '=', $student->sclasses_id)
+        //       ->where("lesson_logs.status", '=', 'open')->first();
+        $lessonLog = LessonLog::find($lessonLogsId);
+
+        // var_dump($lessonLog);
 
         $lesson = Lesson::where('id', '=', $lessonLog->lessons_id)->first();
 
-        $post = Post::where('lesson_logs_id', '=', $lessonLog->lesson_logs_id)
+        $post = Post::where('lesson_logs_id', '=', $lessonLog->id)
                     ->where('students_id', '=', $student->id)
                     ->first();
 
-        $student["lesson_logs_id"] = $lessonLog->lesson_logs_id;
+        $student["lesson_logs_id"] = $lessonLog->id;
         $student["lesson_title"] = $lesson->title;
         if ($post) {
             $student["post_path"] = "/posts/yuying3/" . $post->post_code . "." . $post->file_ext;

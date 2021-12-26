@@ -3,9 +3,9 @@
 @section('content')
 <div class="container">
 
-<div class="panel panel-success col-md-6">
-  <div class="panel-heading">导入学生账户</div>
-  <div class="panel-body">
+<div class="card col-md-6">
+  <div class="card-header bg-info">导入学生账户</div>
+  <div class="card-body">
 
     <form method="POST" enctype="multipart/form-data">
       <div class="file-loading">
@@ -18,30 +18,35 @@
   </div>
 </div>
 <!-- url school/updateStudentEmail   id update-student-email -->
-<div class="panel panel-success col-md-6">
-  <div class="panel-body">
+<div class="card col-md-6">
+  <div class="card-body">
     <img src="/img/oicstudentimport.png" width="400px">
   </div>
 </div>
-<div class="panel panel-success col-md-12">
-  <div class="panel-heading">管理学生账户</div>
-  <div class="panel-body">
+<div class="card col-md-12">
+  <div class="card-header bg-info">管理学生账户</div>
+  <div class="card-body">
 
   @foreach ($sclassesData as $sclass)
       <button class="btn btn-info sclass-btn" value="{{ $sclass['id'] }}">{{ $sclass['title'] }} <span class="badge">{{ $sclass['count'] }}</span></button>
   @endforeach
 
+@foreach ($clubs as $club)
+      <button class="btn btn-info club-btn" value="{{ $club->id }}">{{ $club->club_title }} <span class="badge">{{ $club->club_student_num }}</span></button>
+  @endforeach
+
   </div>
 </div>
 
-<div class="panel panel-success col-md-12">
-  <div class="panel-heading">班级学生账户列表</div>
-  <div class="panel-body">
+<div class="card col-md-12">
+  <div class="card-header bg-info">班级学生账户列表</div>
+  <div class="card-body">
     <div id="toolbar">
         <button id="lock-btn" class="btn btn-danger">锁定</button>
         <button id="active-btn" class="btn btn-danger">激活</button>
         <button id="reset-pass-btn" class="btn btn-success">重置密码</button>
-        <button id="add-new-btn" class="btn btn-success hidden">新增学生</button>
+        <button id="add-new-btn" class="btn btn-success d-none">新增学生</button>
+        <button id="bring-to-club" class="btn btn-warning d-none">加入社团</button>
     </div>
     <table id="student-list" class="table table-condensed table-responsive">
         <thead>
@@ -108,6 +113,38 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="bring-into-club-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">加入社团</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>已选择学生名单：</label>
+          <input type="hidden" name="studentIdList" id="student-id-list" val="">
+          <p id="student-name-list"></p>
+        </div>
+        <div class="form-group">
+          <label>选择社团</label>
+          <select class="form-control" id="club-select">
+            @foreach($clubs as $club)
+              <option value="{{$club->id}}">{{$club->club_title}}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-success" id="confirm-bring-into-club">点击加入</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @section('scripts')

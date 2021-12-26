@@ -17,8 +17,8 @@ window.uuid = function() {
   return uuid
 }
 
-
 window.getUserInfo = function() {
+  var lessonLogsId = localStorage.getItem("lessonLogsId")
   $.ajax({
     url: '/api/v1/users/info',
     beforeSend: function (request) {
@@ -26,7 +26,7 @@ window.getUserInfo = function() {
         request.setRequestHeader('Authorization', getUserToken());
     },
     method: 'GET',
-    data: {},
+    data: {"lessonLogsId": lessonLogsId},
     success: function (res) {
       if (res.code == 200) {
         console.log(res.data)

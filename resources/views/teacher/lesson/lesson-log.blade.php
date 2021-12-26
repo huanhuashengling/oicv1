@@ -17,12 +17,23 @@
           @endforeach
       </select>
     </div>
+
     <div class="col-md-1">
       <select class="form-control" id="sclasses-selection">
           <option value="0">选择班级</option>
       </select>
     </div>
-    <div class="col-md-8">
+
+    <div class="col-md-2">
+      <select class="form-control" id="clubs-selection">
+          <option value="0">选择社团</option>
+          @foreach ($clubData as $club)
+          <option value="{{$club->id}}">{{$club->class_title}}</option>
+          @endforeach
+      </select>
+    </div>
+    
+    <div class="col-md-6">
       <select class="form-control" id="lesson-log-selection">
         <option>选择上课记录</option>
       </select>

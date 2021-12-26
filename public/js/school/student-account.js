@@ -19,6 +19,7 @@ $(document).ready(function() {
 
 	$(".sclass-btn").click(function(e) {
 		$('#student-list').bootstrapTable('destroy');
+        $("#bring-to-club").removeClass("d-none");
 		// console.log($(this).val());
 		var sclassesId = $(this).val();
         $("#add-new-btn").removeClass("hidden");
@@ -55,9 +56,86 @@ $(document).ready(function() {
 	    });
 	});
 
+    $(".club-btn").click(function(e) {
+        $('#student-list').bootstrapTable('destroy');
+        $("#bring-to-club").addClass("d-none");
+        // console.log($(this).val());
+        var clubsId = $(this).val();
+
+        $('#student-list').bootstrapTable({
+            method: 'post', 
+            search: "true",
+            url: "/school/getClubStudentsData",
+            pagination:"true",
+            pageList: [10, 25, 50], 
+            pageSize: 10,
+            pageNumber: 1,
+            toolbar:"#toolbar",
+            queryParams: function(params) {
+                var temp = { 
+                    clubs_id : clubsId
+                };
+                return temp;
+            },
+            clickToSelect: true,
+            columns: [{  
+                        checkbox: true  
+                    },{  
+                        title: '序号',
+                        formatter: function (value, row, index) {  
+                            return index+1;  
+                        }  
+                    }],
+            responseHandler: function (res) {
+                // console.log(res);
+                return res;
+            },
+        });
+    });
+
     $("#add-new-btn").click(function(e) {
         // alert($(this).val());
         $("#add-new-student-modal").modal("show");
+    });
+
+    $("#bring-to-club").click(function(e) {
+        var rows = $("#student-list").bootstrapTable('getSelections');
+        var nameList = "";
+        var idList = "";
+        for (var i = rows.length - 1; i >= 0; i--) {
+            // rows[i].studentsId
+            nameList = ("" == nameList)?rows[i].username:(nameList +","+ rows[i].username)
+            idList = ("" == idList)?rows[i].studentsId:(idList +","+ rows[i].studentsId)
+        }
+        $("#student-name-list").html(nameList);
+        $("#student-id-list").val(idList);
+        // console.log(rows);
+        // console.log(idList);
+        $("#bring-into-club-modal").modal("show");
+    });
+
+    $("#confirm-bring-into-club").click(function(e) {
+        if("" == $("#student-id-list").val())
+        {
+            alert("请先选择学生！");
+            return;
+        }
+        data = {
+            'club_id' : $("#club-select").val(),
+            'student_id_list' : $("#student-id-list").val(),
+        }
+        $.ajax({
+            type: "POST",
+            url: '/school/bringStudentsIntoClub',
+            data: data,
+            success: function( data ) {
+                $("#bring-into-club-modal").modal("hide");
+                $('#student-list').bootstrapTable('refresh');
+            }
+        });
+        // console.log($("#student-name").val());
+        // console.log($("#gender").val());
+        // console.log($("#add-new-btn").val());
     });
 
     $("#confirm-add-new-btn").click(function(e) {
@@ -120,7 +198,7 @@ function studentAccountActionCol(value, row, index) {
         lockStr = "解锁";
         lockClass = "unlock";
     }
-
+    var clubStr = "";
     var lockWorkCommentStr = "禁言";
     var lockWorkCommentClass = "lockWorkComment";
     if (2 == row.work_comment_enable)
@@ -128,11 +206,14 @@ function studentAccountActionCol(value, row, index) {
         lockWorkCommentStr = "解言";
         lockWorkCommentClass = "unlockWorkComment";
     }
+    if ($("#bring-to-club").hasClass("d-none")) {
+        clubStr = ' <a class="btn btn-warning btn-sm unbind-club">解除社团</a>'
+    }
     return [
         '<a class="btn btn-warning btn-sm '+ lockClass+'">'+lockStr+'</a> ',
         '<a class="btn btn-warning btn-sm '+ lockWorkCommentClass+'"">'+lockWorkCommentStr+'</a> ',
         ' <a class="btn btn-danger btn-sm edit">编辑</a> ',
-        ' <a class="btn btn-success btn-sm work-num-add">作品数加1</a>'
+        ' <a class="btn btn-success btn-sm work-num-add">作品数加1</a>',clubStr
     ].join('');
 }
 
@@ -216,6 +297,20 @@ window.studentAccountActionEvents = {
     },
     'click .edit': function(e, value, row, index) {
         console.log("click edit students id "+row.studentsId);
+    },
+    'click .unbind-club': function(e, value, row, index) {
+        $.ajax({
+            type: "POST",
+            url: '/school/unbindClub',
+            data: {users_id: row.studentsId, clubs_id:row.clubsId},
+            success: function( data ) {
+                if("true" == data) {
+                    alert(row.username+"解除社团绑定")
+                } else if ("false" == data) {
+                    alert("解除社团绑定失败！")
+                }
+            }
+        });
     },
     'click .work-num-add': function(e, value, row, index) {
         $.ajax({
