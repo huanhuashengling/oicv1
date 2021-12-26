@@ -45,7 +45,7 @@ $(document).ready(function() {
 		var lessonsId = $("#lessons-id").val();
     var isClub = $("#is-club").val();
 
-		alert(sclassesId + "  "  + isClub);
+		// alert(sclassesId + "  "  + isClub);
 		$.ajax({
             type: "POST",
             url: '/teacher/createLessonLog',
