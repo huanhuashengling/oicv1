@@ -40,9 +40,12 @@ class HomeController extends Controller
         $lessonLog = LessonLog::where(['teachers_id' => $userId, 'status' => 'open'])->first();
 
         if ($lessonLog) {
-            // dd($lessonLog);die();
-            //If the teacher has one lesson log, only need redirect to route takeclass and load view
-            return redirect('teacher/takeclass');
+            if ("true" == $lessonLog->is_club) {
+                return redirect('teacher/takeclubclass');
+            } else {
+                //If the teacher has one lesson log, only need redirect to route takeclass and load view
+                return redirect('teacher/takeclass');
+            }
         }
 
         $chooseLessonsId = $request->session()->get('chooseLessonsId');
@@ -91,6 +94,7 @@ class HomeController extends Controller
         ->join("terms", 'terms.enter_school_year', '=', 'sclasses.enter_school_year')
         ->where(['lesson_logs.teachers_id' => $userId, 'lesson_logs.status' => 'open', 'terms.is_current' => 1])->first();
         // dd($lessonLog);die();
+        
         if ("group" == $request->get("order")) {
             $students = DB::table('students')->select('students.id', 'students.username', 'posts.cover_ext', 'posts.file_ext', 'posts.export_name', 'posts.post_code', 'comments.content', 'post_rates.rate', 'groups.order_num', 'posts.id as posts_id', DB::raw("COUNT(`marks`.`id`) as mark_num"))
             ->leftJoin('posts', 'posts.students_id', '=', 'students.id')

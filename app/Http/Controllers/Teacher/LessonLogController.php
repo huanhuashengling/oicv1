@@ -42,7 +42,7 @@ class LessonLogController extends Controller
             $oldlLessonLog->status = 'open';
             $oldlLessonLog->update();
             if ("true" == $isClub) {
-                return redirect('teacher/takeClubClass');
+                return redirect('teacher/takeclubclass');
             } else {
                 return redirect('teacher/takeclass');
             }

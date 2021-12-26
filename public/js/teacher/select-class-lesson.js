@@ -22,7 +22,7 @@ $(document).ready(function() {
 		$(".class-btn").removeClass("btn-primary");
 		$(this).addClass("btn-primary");
     $("#sclasses-id").val($(this).val());
-		// $("#is-club").val("false");
+		$("#is-club").val("false");
 		checkSelection();
 	});
 
@@ -45,7 +45,7 @@ $(document).ready(function() {
 		var lessonsId = $("#lessons-id").val();
     var isClub = $("#is-club").val();
 
-		// alert(sclassesId + "  "  + lessonsId);
+		alert(sclassesId + "  "  + isClub);
 		$.ajax({
             type: "POST",
             url: '/teacher/createLessonLog',
@@ -74,7 +74,7 @@ function checkSelection() {
             url: '/teacher/getLessonLog',
             data: {sclassesId: sclassesId, lessonsId: lessonsId, isClub: isClub},
             success: function( data ) {
-                console.log(data);
+                // console.log(data);
                 if ("false" != data) {
                 	alert("请注意，这节课你已经上过一次，已有"+data+"份作业，点击按钮课程将重新打开");
                 }
