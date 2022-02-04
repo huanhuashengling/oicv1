@@ -74,7 +74,7 @@
               <th data-field="is_current" data-formatter="graduatedCol">
                     当前学期
               </th>
-              <th data-field="id" data-formatter="sclassActionCol" data-events="classActionEvents">
+              <th data-field="id" data-formatter="termActionCol" data-events="termActionEvents">
                   操作
               </th> 
             </tr>

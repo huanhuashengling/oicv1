@@ -170,6 +170,7 @@ Route::group(['middleware' => 'auth.school:school, school/login', 'prefix' => 's
     $router->post('getSclassesData', 'SclassController@getSclassesData');
     $router->post('getTermsData', 'SclassController@getTermsData');
     $router->post('createOneSclass', 'SclassController@createOneSclass');
+    $router->post('changeSclassStatus', 'SclassController@changeSclassStatus');
     $router->post('createOneTerm', 'SclassController@createOneTerm');
 
     $router->post('getClubsData', 'SclassController@getClubsData');
