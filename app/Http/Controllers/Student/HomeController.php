@@ -54,7 +54,7 @@ class HomeController extends Controller
           // $JWTToken = Auth::guard('api')->fromUser($student);
           $lessonLog = LessonLog::where(['sclasses_id' => $sclassesId, 'status' => 'open'])->first();
         //}
-        var_dump($student->sclasses_id);
+        // var_dump($student->sclasses_id);
 
         $tLessonLogs = LessonLog::select('lesson_logs.id as lesson_logs_id', 'lesson_logs.is_club', 'lessons.title', 'lessons.subtitle', 'lesson_logs.updated_at', 'lessons.id as lessons_id')
         ->join('lessons', 'lessons.id', '=', "lesson_logs.lessons_id")
@@ -77,6 +77,7 @@ class HomeController extends Controller
             $tLesson->finished_status = "未提交";
           }
           if ($lessonLog) {
+            echo "lessonLog " . $lessonLog->id . " lessonLogData " . $lessonLogData->lesson_logs_id . " title " . $lessonLogData->title;
             if ($lessonLog->id == $lessonLogData->lesson_logs_id) {
               $tLesson->selected = "selected";
               $tLesson->curr_str = "";
