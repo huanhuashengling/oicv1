@@ -67,7 +67,7 @@ class HomeController extends Controller
         }
         
         $allLessonData = array();
-        dd($allLessonLogs);
+        // dd($allLessonLogs);
         foreach ($allLessonLogs as $key => $lessonLogData) {
           $clubStr = ("true" == $lessonLogData->is_club)?"*社团* ":"";
           $tLesson = (object) array("order"=> $key + 1, "lesson_logs_id" =>$lessonLogData->lesson_logs_id, "lessons_id" => $lessonLogData->lessons_id, "title" => $lessonLogData->title, 'subtitle' => $lessonLogData->subtitle, 'finished_status' => "已提交", 'selected' => "", 'curr_str' => "[历史] ", "club_str" => $clubStr);
