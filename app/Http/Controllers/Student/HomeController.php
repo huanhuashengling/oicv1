@@ -38,6 +38,8 @@ class HomeController extends Controller
         $clubStudent = ClubStudent::where("students_id", "=", $id)
         ->where("status", "=", "open")->first();
         $sclassesId = $student->sclasses_id;
+        $lessonLog = LessonLog::where(['sclasses_id' => $sclassesId, 'status' => 'open'])->first();
+
         $tClubLessonLogs = "";
         if ($clubStudent) {
           $sclassesId = $clubStudent->clubs_id;
@@ -52,7 +54,6 @@ class HomeController extends Controller
         } //else {
           // $JWTToken = $student->getJWTIdentifier();
           // $JWTToken = Auth::guard('api')->fromUser($student);
-          $lessonLog = LessonLog::where(['sclasses_id' => $sclassesId, 'status' => 'open'])->first();
         //}
         // var_dump($student->sclasses_id);
 
