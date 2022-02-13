@@ -38,9 +38,10 @@ class HomeController extends Controller
         $clubStudent = ClubStudent::where("students_id", "=", $id)
         ->where("status", "=", "open")->first();
         $sclassesId = $student->sclasses_id;
-        $lessonLog = LessonLog::where(['sclasses_id' => $sclassesId, 'status' => 'open'])->first();
+        $lessonLog = LessonLog::where(['sclasses_id' => $student->sclasses_id, 'status' => 'open'])->first();
 
         $tClubLessonLogs = "";
+        $clubLessonLog = "";
         if ($clubStudent) {
           $sclassesId = $clubStudent->clubs_id;
           $tClubLessonLogs = LessonLog::select('lesson_logs.id as lesson_logs_id', 'lesson_logs.is_club', 'lessons.title', 'lessons.subtitle', 'lesson_logs.updated_at', 'lessons.id as lessons_id')
@@ -48,6 +49,7 @@ class HomeController extends Controller
           ->where('lesson_logs.sclasses_id', "=", $clubStudent->clubs_id)
           ->where('lesson_logs.is_club', "=", "true")
           ->get();
+          $clubLessonLog = LessonLog::where(['sclasses_id' => $clubStudent->clubs_id, 'status' => 'open'])->first();
 
           // $lessonLog = LessonLog::where(['sclasses_id' => $clubStudent->clubs_id, 'status' => 'open'])->first();
 
@@ -80,6 +82,14 @@ class HomeController extends Controller
           if ($lessonLog) {
             echo "lessonLog " . $lessonLog->id . " lessonLogData " . $lessonLogData->lesson_logs_id . " title " . $lessonLogData->title;
             if ($lessonLog->id == $lessonLogData->lesson_logs_id) {
+              $tLesson->selected = "selected";
+              $tLesson->curr_str = "";
+            }
+          }
+
+          if ($clubLessonLog) {
+            echo "clubLessonLog " . $clubLessonLog->id . " lessonLogData " . $lessonLogData->lesson_logs_id . " title " . $lessonLogData->title;
+            if ($clubLessonLog->id == $lessonLogData->lesson_logs_id) {
               $tLesson->selected = "selected";
               $tLesson->curr_str = "";
             }
