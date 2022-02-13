@@ -80,7 +80,7 @@ class HomeController extends Controller
             $tLesson->finished_status = "未提交";
           }
           if ($lessonLog) {
-            echo "lessonLog " . $lessonLog->id . " lessonLogData " . $lessonLogData->lesson_logs_id . " title " . $lessonLogData->title;
+            // echo "lessonLog " . $lessonLog->id . " lessonLogData " . $lessonLogData->lesson_logs_id . " title " . $lessonLogData->title;
             if ($lessonLog->id == $lessonLogData->lesson_logs_id) {
               $tLesson->selected = "selected";
               $tLesson->curr_str = "";
@@ -88,7 +88,7 @@ class HomeController extends Controller
           }
 
           if ($clubLessonLog) {
-            echo "clubLessonLog " . $clubLessonLog->id . " lessonLogData " . $lessonLogData->lesson_logs_id . " title " . $lessonLogData->title;
+            // echo "clubLessonLog " . $clubLessonLog->id . " lessonLogData " . $lessonLogData->lesson_logs_id . " title " . $lessonLogData->title;
             if ($clubLessonLog->id == $lessonLogData->lesson_logs_id) {
               $tLesson->selected = "selected";
               $tLesson->curr_str = "";
