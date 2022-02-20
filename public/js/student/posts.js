@@ -39,7 +39,9 @@ $(document).ready(function() {
     });
 
     $("#term-selection").change(function(e){
+        // alert("asasas");
         // refreshPostList();
+        $('#post-list').bootstrapTable("refresh");
     })
     // refreshPostList();
     $(document)
