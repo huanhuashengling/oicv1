@@ -16,6 +16,7 @@ use App\Models\Club;
 use App\Models\ClubStudent;
 use App\Models\Comment;
 use App\Models\Mark;
+use App\Models\Term;
 
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
@@ -32,12 +33,17 @@ use JWTAuth;
 class HomeController extends Controller
 {
     public function index()
-    {   
+    {      
         $id = auth()->guard("student")->id();
         $student = Student::find($id);
         $clubStudent = ClubStudent::where("students_id", "=", $id)
         ->where("status", "=", "open")->first();
         $sclassesId = $student->sclasses_id;
+
+        $sclass = Sclass::find($sclassesId);
+        $currTerm = Term::where(["enter_school_year" => $sclass->enter_school_year, "is_current" => 1])->first();
+        // dd($currTerm);
+
         $lessonLog = LessonLog::where(['sclasses_id' => $student->sclasses_id, 'status' => 'open'])->first();
 
         $tClubLessonLogs = "";
@@ -48,6 +54,7 @@ class HomeController extends Controller
           ->join('lessons', 'lessons.id', '=', "lesson_logs.lessons_id")
           ->where('lesson_logs.sclasses_id', "=", $clubStudent->clubs_id)
           ->where('lesson_logs.is_club', "=", "true")
+          ->whereBetween('lesson_logs.created_at', array($currTerm->from_date, $currTerm->to_date))
           ->get();
           $clubLessonLog = LessonLog::where(['sclasses_id' => $clubStudent->clubs_id, 'status' => 'open'])->first();
 
@@ -61,7 +68,9 @@ class HomeController extends Controller
 
         $tLessonLogs = LessonLog::select('lesson_logs.id as lesson_logs_id', 'lesson_logs.is_club', 'lessons.title', 'lessons.subtitle', 'lesson_logs.updated_at', 'lessons.id as lessons_id')
         ->join('lessons', 'lessons.id', '=', "lesson_logs.lessons_id")
-        ->where(['lesson_logs.sclasses_id' => $student->sclasses_id])->get();
+        ->where(['lesson_logs.sclasses_id' => $student->sclasses_id])
+        ->whereBetween('lesson_logs.created_at', array($currTerm->from_date, $currTerm->to_date))
+        ->get();
         
         if (isset($tClubLessonLogs[0])) {
           $allLessonLogs = $tLessonLogs->concat($tClubLessonLogs);
