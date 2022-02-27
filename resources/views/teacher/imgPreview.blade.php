@@ -91,9 +91,11 @@
         success: function( data ) {
           console.log(data);
           if ("mp4" == data.file_ext) {
+            $('#video').removeClass("hidden");
             $("#mp4Preview").attr("src", "/posts/yuying3/" + data.export_name);
             $('#video')[0].load();
           } else {
+            $('#video').addClass("hidden");
             $("#imgPreview").attr("src", "/posts/yuying3/" + data.export_name)
           }
           $("#lesson-title").text("课题：" + data.title);
