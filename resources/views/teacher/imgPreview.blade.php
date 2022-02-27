@@ -23,7 +23,7 @@
       <div class="card">
         <div class="card-body">
           <img id="imgPreview" scr="" />
-          <video id="video" controls="" class="showVideo" preload="none">
+          <video id="video" controls="" class="hideVideo" preload="none">
             <source id="mp4Preview" src="" type="video/mp4"> 
           </video>
         </div>
