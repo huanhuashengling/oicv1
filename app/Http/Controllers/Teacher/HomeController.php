@@ -54,11 +54,16 @@ class HomeController extends Controller
         $classData = [];
         foreach ($sclasses as $key => $sclass) {
             $term = Term::where(['enter_school_year' => $sclass['enter_school_year'], 'is_current' => 1])->first();
-            echo $term['grade_key'];
-            echo $sclass['class_title'];
-            echo $sclass['id'];
-            dd($classData);
-            $classData[$sclass['id']] = $term['grade_key'] . $sclass['class_title'] . "班";
+            
+            try {
+                $classData[$sclass['id']] = $term['grade_key'] . $sclass['class_title'] . "班";
+            } catch (Exception $e) {
+                echo $term['grade_key'];
+                echo $sclass['class_title'];
+                echo $sclass['id'];
+                dd($classData);
+            }
+            
         }
 
         $clubs = Club::where(["status" => "open", "schools_id" => $teacher->schools_id])->get();
