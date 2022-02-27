@@ -57,7 +57,7 @@ class HomeController extends Controller
             echo $term['grade_key'];
             echo $sclass['class_title'];
             echo $sclass['id'];
-            dd($chooseLessonsId);
+            dd($classData);
             $classData[$sclass['id']] = $term['grade_key'] . $sclass['class_title'] . "班";
         }
 
