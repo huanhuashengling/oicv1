@@ -177,6 +177,7 @@ return [
 
         Chenhua\MarkdownEditor\MarkdownEditorServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
 
     ],
 
@@ -234,7 +235,7 @@ return [
         'MarkdownEditor' => Chenhua\MarkdownEditor\Facades\MarkdownEditor::class,
 
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-
+        'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class,
     ],
 
 ];

@@ -57,6 +57,10 @@
                           <input class="form-check-input" type="radio" name="allowPostFileTypes" id="allowTypes2" value="'jpg', 'png', 'gif', 'bmp'">
                           <label class="form-check-label" for="inlineRadio2">img</label>
                         </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="allowPostFileTypes" id="allowTypes3" value="mp4">
+                          <label class="form-check-label" for="inlineRadio3">mp4</label>
+                        </div>
                         <br>
                         <p>编写课堂帮助文档</p>
                         <!-- <div class="editor"> 

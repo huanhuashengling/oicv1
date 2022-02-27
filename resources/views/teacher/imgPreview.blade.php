@@ -16,6 +16,9 @@
       <div class="card">
         <div class="card-body">
           <img id="imgPreview" scr="" />
+          <video id="video" controls="" preload="none">
+            <source id="mp4Preview" src="" type="video/mp4"> 
+          </video>
         </div>
         <div class="card-footer">
           <div class="row">
@@ -87,7 +90,12 @@
         data: {post_code: postCode},
         success: function( data ) {
           console.log(data);
-          $("#imgPreview").attr("src", "/posts/yuying3/" + data.export_name)
+          if ("mp4" == data.file_ext) {
+            $("#mp4Preview").attr("src", "/posts/yuying3/" + data.export_name);
+            $('#video')[0].load();
+          } else {
+            $("#imgPreview").attr("src", "/posts/yuying3/" + data.export_name)
+          }
           $("#lesson-title").text("课题：" + data.title);
           $("#date-span").text(" " + data.updated_at);
           $("#student-name").text("创作者：" + data.username);

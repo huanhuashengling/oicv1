@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\File;
 use \Auth;
 use \Storage;
 use MarkdownEditor;
+use FFMpeg;
 use JWTAuth;
 
 class HomeController extends Controller
@@ -143,12 +144,12 @@ class HomeController extends Controller
       }
       $lesson->help_md_doc = MarkdownEditor::parse($lesson->help_md_doc);
       $lesson->JWTToken = $JWTToken;
-      $lesson->export_name = "";
-      // $lesson->export_name = "/posts/yuying3/619579c62d64f.png";
+      $lesson->preview_path = "";
+      // $lesson->preview_path = "/posts/yuying3/619579c62d64f.png";
       
       $post = Post::where(['students_id' => $id, 'lesson_logs_id' => $lessonLogsId])->first();
       if ($post) {
-        $lesson->export_name = "/posts/yuying3/" . $post->export_name;
+        $lesson->preview_path = "/posts/yuying3/" . $post->post_code . "_c.png";
       }
       return $lesson;
     }
@@ -173,7 +174,7 @@ class HomeController extends Controller
         $originalName = $file->getClientOriginalName();
         // $bytes = File::size($filename);
         // 扩展名
-        $ext = $file->getClientOriginalExtension();
+        $ext = strtolower($file->getClientOriginalExtension());
         // $originalName = str_replace($originalName, ".".$ext);
         // MimeType
         $type = $file->getClientMimeType();
@@ -184,12 +185,18 @@ class HomeController extends Controller
         $uniqid = uniqid();
         // $filename = $originalName . '-' . $uniqid . '.' . $ext;
         $filename = $uniqid . '.' . $ext;
-
-        $bool = Storage::disk($this->getSchoolCode() . 'posts')->put($filename, file_get_contents($realPath)); 
+        $bool = Storage::disk($this->getSchoolCode() . 'posts')->put($filename, file_get_contents($realPath));
 
         Image::configure(array('driver' => 'imagick')); 
-        Image::make(file_get_contents($realPath))
+        if ("mp4" == $ext) {
+          $contents = FFMpeg::fromDisk('yuying3posts')->open($uniqid. ".mp4")->getFrameFromSeconds(0)->export()->getFrameContents();
+          Image::make($contents)
               ->resize(240, 180)->save(public_path('posts/yuying3/') . $uniqid . '_c.png');
+
+        } else {
+          Image::make(file_get_contents($realPath))
+              ->resize(240, 180)->save(public_path('posts/yuying3/') . $uniqid . '_c.png');
+        }
 
         //TDDO update these new or update code
         if($oldPost) {

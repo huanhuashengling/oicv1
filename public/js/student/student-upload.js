@@ -19,13 +19,19 @@ function getOneLesson(lessonsId) {
         url: '/student/getOneLesson',
         data: {lessons_id: $("#lesson-select").val(), lesson_logs_id:lessonLogsId},
         success: function( data ) {
-            // console.log(data);
-            var exportName = data.export_name;
+            console.log(data);
+            var exportName = data.preview_path;
+            var allowFileExt = "";
             if ("sb3" == data.allow_post_file_types) {
               $("#sb3-area").removeClass("d-none");
               $("#img-area").addClass("d-none");
               $("#sb3editor-atag").attr("href", "/scratch3/index.html?code="+data.JWTToken+"&llid="+lessonLogsId);
             } else {
+              if ("mp4" == data.allow_post_file_types) {
+                allowFileExt = ["mp4"];
+              } else {
+                allowFileExt = ["jpg", "jpeg", "png", "gif", "bmp"];
+              }
               $("#img-area").removeClass("d-none");
               $("#sb3-area").addClass("d-none");
               $("#input-zh").fileinput('destroy');
@@ -35,9 +41,10 @@ function getOneLesson(lessonsId) {
                   showPreview: true,
                   elErrorContainer: '#file-errors',
                   elCaptionContainer: '#caption-info',
-                  allowedFileExtensions: ["jpg", "jpeg", "png", "gif", "bmp"], 
+                  allowedFileExtensions: allowFileExt, 
+                  maxFileSize: 3000,
                   overwriteInitial: true,
-                  initialPreview: data.export_name,                  
+                  initialPreview: exportName,                  
                   initialPreviewShowDelete: false,
                   initialPreviewAsData: true, // 特别重要
                   uploadExtraData: {lesson_logs_id:lessonLogsId},
