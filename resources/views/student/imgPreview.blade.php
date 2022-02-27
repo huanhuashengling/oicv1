@@ -20,10 +20,10 @@
 @endphp
 <style>
    .hideVideo {
+      display: none;
+   }
+   .showVideo {
       display: block;
-      z-index: 999;
-      margin-top: 10px;
-      margin-left: 10px;
    }
 </style>
 <div class="container">
@@ -42,7 +42,7 @@
       <div class="card">
         <div class="card-body">
           <img class="img-fluid" id="imgPreview" scr="" />
-          <video id="video" controls="" preload="none">
+          <video id="video" controls="" preload="none" class="showVideo">
             <source id="mp4Preview" src="" type="video/mp4"> 
           </video>
         </div>
@@ -118,13 +118,13 @@
         success: function( data ) {
           console.log(data);
           if ("mp4" == data.file_ext) {
-            // $('#video').removeClass("hidden");
-            $('#video').style.display = "block";
+            $('#video').removeClass("hideVideo");
+            $('#video').addClass("showVideo");
             $("#mp4Preview").attr("src", "/posts/yuying3/" + data.export_name);
             $('#video')[0].load();
           } else {
-            // $('#video').addClass("hidden");
-            $('#video').style.display = "none";
+            $('#video').addClass("hideVideo");
+            $('#video').removeClass("showVideo");
             $("#imgPreview").attr("src", "/posts/yuying3/" + data.export_name);
           }
           $("#lesson-title").text("课题：" + data.title);
