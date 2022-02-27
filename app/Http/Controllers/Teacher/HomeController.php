@@ -56,6 +56,9 @@ class HomeController extends Controller
             $term = Term::where(['enter_school_year' => $sclass['enter_school_year'], 'is_current' => 1])->first();
             
             try {
+                echo $term['grade_key'];
+                echo $sclass['class_title'];
+                echo $sclass['id'];
                 $classData[$sclass['id']] = $term['grade_key'] . $sclass['class_title'] . "班";
             } catch (Exception $e) {
                 echo $term['grade_key'];
