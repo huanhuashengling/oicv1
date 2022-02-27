@@ -54,6 +54,10 @@ class HomeController extends Controller
         $classData = [];
         foreach ($sclasses as $key => $sclass) {
             $term = Term::where(['enter_school_year' => $sclass['enter_school_year'], 'is_current' => 1])->first();
+            echo $term['grade_key'];
+            echo $sclass['class_title'];
+            echo $sclass['id'];
+            dd($chooseLessonsId);
             $classData[$sclass['id']] = $term['grade_key'] . $sclass['class_title'] . "班";
         }
 
