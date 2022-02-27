@@ -54,7 +54,7 @@ class PostController extends Controller
 
         $clubStudent = ClubStudent::where("students_id", "=", $id)
         ->where("status", "=", "open")->first();
-        $tClubLessonLogs = "";
+        $tClubLessonLogs = [];
         if ($clubStudent) {
           $sclassesId = $clubStudent->clubs_id;
           $tClubLessonLogs = LessonLog::select('lesson_logs.id', 'lesson_logs.is_club', 'lessons.title', 'lessons.subtitle', 'lessons.id as lessons_id')
