@@ -117,7 +117,7 @@ class ClassmateController extends Controller
                 ->join('lesson_logs', 'lesson_logs.id', '=', 'posts.lesson_logs_id')
                 ->join('lessons', 'lessons.id', '=', 'lesson_logs.lessons_id')
                 ->where('terms.is_current', '=', 1)
-                ->where('sclasses.id', '=', $student->sclasses_id)
+                // ->where('sclasses.id', '=', $student->sclasses_id)
                 ->where('posts.lesson_logs_id', '=', $lessonLog->id)
                 ->groupBy('posts.id', 'sclasses.class_title', 'terms.grade_key', 'posts.file_ext', 'posts.cover_ext', 'posts.post_code', 'students.username', 'lessons.title')
                 ->orderby("posts.id", "DESC")->paginate(24);
