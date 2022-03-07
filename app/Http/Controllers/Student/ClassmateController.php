@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use \DB;
 use App\Models\Student;
+use App\Models\ClubStudent;
 use App\Models\LessonLog;
 use App\Models\Sclass;
 use App\Models\Post;
@@ -95,7 +96,18 @@ class ClassmateController extends Controller
         $posts = [];
         $id = \Auth::guard("student")->id();
         $student = Student::select('students.sclasses_id')->where('students.id', '=', $id)->first();
-        $lessonLog = LessonLog::where(["sclasses_id" => $student->sclasses_id, "status" => "open"])->first();
+        
+        $clubStudent = ClubStudent::where("students_id", "=", $id)
+        ->where("status", "=", "open")->first();
+
+        if (isset($clubStudent)) {
+            $sclassesId = $clubStudent->clubs_id;
+        } else {
+            $sclassesId = $student->sclasses_id;
+        }
+
+        $lessonLog = LessonLog::where(["sclasses_id" => $sclassesId, "status" => "open"])->first();
+
         if (isset($lessonLog)) {
             $posts = Post::select('posts.id as pid', 'sclasses.class_title', 'terms.grade_key', 'posts.file_ext', 'posts.post_code','posts.cover_ext', 'students.username', 'lessons.title as lesson_title')
                 // ->where('posts.students_id', '<>', $id)
