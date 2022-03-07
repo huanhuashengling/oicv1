@@ -45,6 +45,11 @@ $(document).ready(function() {
 	});
 
     $("#clubs-selection").change(function(){
+        if (0 == $("#term-selection").val()) {
+            alert("请先任选一个当前学期!");
+            $("#clubs-selection").val(0);
+            return;
+        }
         $.ajax({
             type: "POST",
             url: '/teacher/loadLessonLogSelection',
