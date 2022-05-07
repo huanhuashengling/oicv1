@@ -46,10 +46,10 @@
                     </svg>
                     <div style="position:relative;">
                     <div style="position:absolute;left;0;bottom:0;">
-                    <svg width="361" height="47" xmlns="http://www.w3.org/2000/svg" >
+                    <svg width="500" height="47" xmlns="http://www.w3.org/2000/svg" >
                      <g>
                       <title>Our Information Class</title>
-                      <text stroke="#000" xml:space="preserve" text-anchor="start" font-family="sans-serif" font-size="36" id="svg_1" y="36.5" x="4" stroke-width="0" fill="#ff0000">Our Information Class</text>
+                      <text stroke="#000" xml:space="preserve" text-anchor="start" font-family="sans-serif" font-size="34" id="svg_1" y="36.5" x="4" stroke-width="0" fill="#ff0000">Our Information Class</text>
                      </g>
                     </svg>
                 </div>

@@ -18,7 +18,6 @@
     <link href="/css/jquery-ui.css" rel="stylesheet">
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap.bundle.min.js"></script>
 
     <script src="/js/respond.min.js"></script>
 
@@ -74,6 +73,7 @@
             <a class="nav-link {{ request()->segment(2) === 'scoreReport' ? 'active' : null }}" href="/teacher/scoreReport" tabindex="-1">成绩报告</a>
           </li>
         </ul>
+      
           <ul class="nav navbar-nav navbar-right">
           @if (Auth::guard("teacher")->guest())
             <li><a href="{{ url('/login') }}">{{ trans("layouts.login") }}</a></li>
@@ -82,11 +82,12 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-bs-toggle="dropdown" aria-expanded="false">你好，{{ Auth::guard("teacher")->user()->username }} <span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="dropdown07">
-                  <li><a class="dropdown-item" href="{{ url('/teacher/reset') }}">修改个人信息</a></li>
-                  <li><a class="dropdown-item" href="{{ url('/teacher/reset') }}">修改密码</a></li>
-                  <li><a class="dropdown-item" href="{{ url('/teacher/logout') }}">{{ trans("layouts.logout") }}</a></li>
+                  <li><a class="dropdown-item" href="{{ url('/teacher/reset') }}"><i class="bi bi-info-circle"></i> 个人信息</a></li>
+                  <li><a class="dropdown-item" href="{{ url('/teacher/reset') }}"><i class="bi bi-gear"></i> 修改密码</a></li>
+                  <li><a class="dropdown-item" href="{{ url('/teacher/logout') }}"><i class="bi bi-arrow-left-circle"></i> {{ trans("layouts.logout") }}</a></li>
                 </ul>
               </li>
+
               @endif
           </ul>
 
