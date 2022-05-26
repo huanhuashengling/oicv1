@@ -10,7 +10,7 @@
     <title>{{ trans("layouts.title") }}</title>
     <link rel="icon" href="/img/oic.ico" type="image/x-icon" />
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/bootstrap-icons.css">
     <link href="/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
     <link href="/css/bootstrap-table.min.css" media="all" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="/css/editormd.preview.min.css" />
@@ -77,7 +77,6 @@
             <a class="nav-link {{ request()->segment(2) === 'open-classroom' ? 'active' : null }}" href="{{ url('/student/open-classroom') }}" tabindex="-1">开放课堂</a>
           </li> -->
         </ul>
-
           <ul class="nav navbar-nav navbar-right">
           @if (Auth::guard("student")->guest())
             <li><a href="{{ url('/login') }}">{{ trans("layouts.login") }}</a></li>
