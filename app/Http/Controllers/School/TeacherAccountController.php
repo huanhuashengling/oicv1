@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\School;
 use App\Models\Teacher;
+use Illuminate\Support\Str;
 
 
 class TeacherAccountController extends Controller
@@ -40,7 +41,7 @@ class TeacherAccountController extends Controller
                 'email' => $request->get('email'),
                 'password' => bcrypt($request->get('password')),
                 'schools_id' => $request->get('schools_id'),
-                'remember_token' => str_random(10),
+                'remember_token' => Str::random(10),
             ]);
         } catch (Exception $e) {
             throw new Exception("Error Processing Request", 1);

@@ -45,6 +45,24 @@ class SclassController extends Controller
         }
     }
 
+    public function changeSclassStatus(Request $request)
+    {
+        $sclassesId = $request->get('sclassesId');
+        try {
+            $sclass = Sclass::find($sclassesId);
+            $sclass->is_graduated = 
+            $sclass = Sclass::create([
+                'enter_school_year' => $request->get('enter_school_year'),
+                'class_num' => $request->get('class_num'),
+                'class_title' => $request->get('class_title'),
+                'is_graduated' => $request->get('is_graduated'),
+                'schools_id' => $request->get('schools_id'),
+            ]);
+        } catch (Exception $e) {
+            throw new Exception("Error Processing Request", 1);
+        }
+    }
+
     public function createOneTerm(Request $request)
     {
         try {
@@ -64,7 +82,7 @@ class SclassController extends Controller
     public function getClubsData()
     {
         $schoolsId = \Auth::guard("school")->id();
-        $clubs = Club::get();
+        $clubs = Club::where('schools_id', '=', $schoolsId)->get();
         return json_encode($clubs);
     }
 

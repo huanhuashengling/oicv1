@@ -27,10 +27,11 @@ $(document).ready(function() {
     		$("#lesson-log-selection").html("<option>请选择学期</option>");
     		return;
     	}
-		if (0 == $("#sclasses-selection").val()) {
-    		$("#lesson-log-selection").html("<option>请选择班号</option>");
-    		return;
-    	}
+		// if (0 == $("#sclasses-selection").val()) {
+  //   		$("#lesson-log-selection").html("<option>请选择班号</option>");
+  //   		return;
+  //   	}
+        $("#clubs-selection").val(0);
         // alert($("#term-selection").val());
 		// alert($("#sclasses-selection").val());
 		$.ajax({
@@ -50,10 +51,11 @@ $(document).ready(function() {
             $("#clubs-selection").val(0);
             return;
         }
+        $("#sclasses-selection").val(0);
         $.ajax({
             type: "POST",
             url: '/teacher/loadLessonLogSelection',
-            data: {terms_id: $("#term-selection").val(), sclassesId: $("#clubs-selection").val()},
+            data: {terms_id: $("#term-selection").val(), clubsId: $("#clubs-selection").val()},
             success: function( data ) {
                 // console.log(data);
                 $("#lesson-log-selection").html(data);

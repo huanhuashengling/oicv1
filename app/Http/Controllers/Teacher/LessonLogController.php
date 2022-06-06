@@ -125,12 +125,13 @@ class LessonLogController extends Controller
         $term = Term::find($request->get('terms_id'));
             $from = date('Y-m-d', strtotime($term->from_date)); 
             $to = date('Y-m-d', strtotime($term->to_date));
-        if($request->get('terms_id')) {
+        if($request->get('sclassesId')) {
             $sclass = Sclass::find($request->get('sclassesId'));
             // $matchThese = ['field' => 'value', 'another_field' => 'another_value', ...];
+            $matchThese = ["lesson_logs.is_club" => "false"];
 
         } else {
-            $sclass = Club::where(['status' => 'open'])->find($request->get('sclassesId'));
+            $sclass = Club::where(['status' => 'open'])->find($request->get('clubsId'));
             $matchThese = ["lesson_logs.is_club" => "true"];
         }
         

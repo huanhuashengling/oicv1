@@ -41,7 +41,7 @@ class StudentAccountController extends Controller
                               ->orderBy('sclasses.id')
                               ->get();
 
-        $clubs = Club::all();
+        $clubs = Club::where('schools_id', '=', $schoolsId)->get();
         foreach ($clubs as $key => $club) {
             $clubStudent = ClubStudent::where(["clubs_id" => $club->id])->count();
             $club->club_student_num = $clubStudent;

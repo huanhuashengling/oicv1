@@ -101,7 +101,7 @@ $(document).ready(function() {
                     }  
                 }],
         responseHandler: function (res) {
-            console.log(res);
+            // console.log(res);
             return res;
         },
     });
@@ -185,7 +185,7 @@ $(document).ready(function() {
             'status': "open",
             'schools_id': $("#schools-id").val(),
         }
-        console.log(data);
+        // console.log(data);
         $.ajax({
             type: "POST",
             url: '/school/createOneClub',
@@ -204,44 +204,49 @@ function graduatedCol(value, row, index) {
     ].join('');
 }
 
-function resetCol(value, row, index) {
-    return [
-        '<a class="btn btn-info btn-sm reset" data-unique-id="', row.users_id, '">重置</a>'
-    ].join('');
-}
-
 function sclassActionCol(value, row, index) {
     return [
         ' <a class="btn btn-danger btn-sm edit">编辑</a> ',
+        ' <a class="btn btn-danger btn-sm graduate">改毕业</a> ',
     ].join('');
 }
 
 function clubActionCol(value, row, index) {
     return [
-        ' <a class="btn btn-danger btn-sm edit">关闭</a> ',
+        ' <a class="btn btn-danger btn-sm close">关闭</a> ',
         ' <a class="btn btn-danger btn-sm edit">编辑</a> ',
     ].join('');
 }
 
-window.resetActionEvents = {
-	'click .reset': function(e, value, row, index) {
-     	$.ajax({
+function termActionCol(value, row, index) {
+    return [
+        ' <a class="btn btn-danger btn-sm close">不做</a> ',
+    ].join('');
+}
+
+window.classActionEvents = {
+    'click .edit': function(e, value, row, index) {
+        console.log("click edit sclass id "+row.id);
+    },
+    'click .graduate': function(e, value, row, index) {
+        console.log("click edit sclass id "+row.id);
+        $.ajax({
             type: "POST",
-            url: '/school/resetStudentPassword',
-            data: {users_id: row.studentsId},
+            url: '/school/changeSclassStatus',
+            data: {sclassesId: row.id},
             success: function( data ) {
-            	if("true" == data) {
-            		alert("重置密码成功，已修改为默认密码123456！")
-            	} else if ("false" == data) {
-            		alert("重置密码失败，没有找到该用户！")
-            	}
+                if("true" == data) {
+                    alert("重置密码成功，已修改为默认密码123456！")
+                } else if ("false" == data) {
+                    alert("重置密码失败，没有找到该用户！")
+                }
             }
         });
     },
 }
 
-window.classActionEvents = {
-    'click .edit': function(e, value, row, index) {
-        console.log("click edit students id "+row.studentsId);
+window.termActionEvents = {
+    'click .close': function(e, value, row, index) {
+        console.log("click edit term id "+row.id);
     },
 }
