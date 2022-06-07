@@ -63,6 +63,7 @@ class UserController extends ApiController
         //       ->where("lesson_logs.status", '=', 'open')->first();
         $lessonLog = LessonLog::find($lessonLogsId);
 
+        
         // var_dump($lessonLog);
 
         $lesson = Lesson::where('id', '=', $lessonLog->lessons_id)->first();
@@ -73,8 +74,12 @@ class UserController extends ApiController
 
         $student["lesson_logs_id"] = $lessonLog->id;
         $student["lesson_title"] = $lesson->title;
+
+        $sclass = Sclass::find($student->sclasses_id);
+        $school = School::find($sclass->schools_id);
+
         if ($post) {
-            $student["post_path"] = "/posts/yuying3/" . $post->post_code . "." . $post->file_ext;
+            $student["post_path"] = "/posts/" . $school->code . "/" . $post->post_code . "." . $post->file_ext;
         } else {
             if ($lesson->default_sb3_name) {
                 $student["post_path"] = "/project/" . $lesson->default_sb3_name . ".sb3";
