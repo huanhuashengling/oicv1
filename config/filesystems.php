@@ -83,6 +83,26 @@ return [
             'visibility' => 'public',
         ],
 
+        'dtrzposts' => [
+            'driver' => 'local',
+            'root' => public_path('posts/dtrz'),
+            'visibility' => 'public',
+        ],
+
+        'dtrzcover' => [
+            'driver' => 'local',
+            'root' => public_path('posts/dtrz'),
+            // 'url' => 'posts/' . 
+            'visibility' => 'public',
+        ],
+
+        'dtrzworks' => [
+            'driver' => 'local',
+            'root' => public_path('works/dtrz'),
+            // 'url' => 'posts/' . 
+            'visibility' => 'public',
+        ],
+
 
         's3' => [
             'driver' => 's3',
