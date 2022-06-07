@@ -19,7 +19,7 @@ function getOneLesson(lessonsId) {
         url: '/student/getOneLesson',
         data: {lessons_id: $("#lesson-select").val(), lesson_logs_id:lessonLogsId},
         success: function( data ) {
-            console.log(data);
+            // console.log(data);
             var exportName = data.preview_path;
             var allowFileExt = "";
             if ("sb3" == data.allow_post_file_types) {

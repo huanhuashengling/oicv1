@@ -103,7 +103,7 @@ function emailOutStudentPostReport(rowdata, emailCount) {
             url: '/teacher/email-out',
             data: {sclassesId: sclassesId, termsId: termsId, rowdata: rowdata, emailCount: emailCount},
             success: function( data ) {
-                console.log(data);
+                // console.log(data);
             }
         });
 }

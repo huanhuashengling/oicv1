@@ -50,6 +50,8 @@ class HomeController extends Controller
         $tClubLessonLogs = "";
         $clubLessonLog = "";
         if ($clubStudent) {
+          $isClubStudent = "true";
+
           $sclassesId = $clubStudent->clubs_id;
           $tClubLessonLogs = LessonLog::select('lesson_logs.id as lesson_logs_id', 'lesson_logs.is_club', 'lessons.title', 'lessons.subtitle', 'lesson_logs.updated_at', 'lessons.id as lessons_id')
           ->join('lessons', 'lessons.id', '=', "lesson_logs.lessons_id")
@@ -70,6 +72,7 @@ class HomeController extends Controller
         $tLessonLogs = LessonLog::select('lesson_logs.id as lesson_logs_id', 'lesson_logs.is_club', 'lessons.title', 'lessons.subtitle', 'lesson_logs.updated_at', 'lessons.id as lessons_id')
         ->join('lessons', 'lessons.id', '=', "lesson_logs.lessons_id")
         ->where(['lesson_logs.sclasses_id' => $student->sclasses_id])
+        ->where('lesson_logs.is_club', "=", "false")//distinguish is not club when same with the sclasses_id 
         ->whereBetween('lesson_logs.created_at', array($currTerm->from_date, $currTerm->to_date))
         ->get();
         
@@ -146,8 +149,10 @@ class HomeController extends Controller
         $lesson->help_md_doc = str_replace("10.115.3.153", $_SERVER['HTTP_HOST'], $lesson->help_md_doc);
       }
 
-      if(strpos($lesson->help_md_doc, "10.115.3.3:8080")) {
-        $lesson->help_md_doc = str_replace("10.115.3.3:8080", "kiftd.workc.cc:7002", $lesson->help_md_doc);
+      if("10.115.3.153" != $_SERVER['HTTP_HOST']) {
+        if(strpos($lesson->help_md_doc, "10.115.3.3:8080")) {
+          $lesson->help_md_doc = str_replace("10.115.3.3:8080", "kiftd.workc.cc:7002", $lesson->help_md_doc);
+        }
       }
 
       $lesson->help_md_doc = MarkdownEditor::parse($lesson->help_md_doc);
