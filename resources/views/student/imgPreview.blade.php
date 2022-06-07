@@ -101,7 +101,8 @@
     var workId = urlParams('workId')
     var workUrl = urlParams('workUrl')
     var postCode = urlParams('postCode');
-    var postUrl = "/posts/yuying3/" + urlParams('postCode') + ".png";
+    var schoolCode = urlParams('schoolCode');
+    var postUrl = "/posts/" + schoolCode + "/" + urlParams('postCode') + ".png";
 
     $(document).ready(function() {
 
@@ -120,12 +121,12 @@
           if ("mp4" == data.file_ext) {
             $('#video').removeClass("hideVideo");
             $('#video').addClass("showVideo");
-            $("#mp4Preview").attr("src", "/posts/yuying3/" + data.export_name);
+            $("#mp4Preview").attr("src", "/posts/" + schoolCode + "/" + data.export_name);
             $('#video')[0].load();
           } else {
             $('#video').addClass("hideVideo");
             $('#video').removeClass("showVideo");
-            $("#imgPreview").attr("src", "/posts/yuying3/" + data.export_name);
+            $("#imgPreview").attr("src", "/posts/" + schoolCode + "/" + data.export_name);
           }
           $("#lesson-title").text("课题：" + data.title);
           $("#date-span").text(" " + data.updated_at);

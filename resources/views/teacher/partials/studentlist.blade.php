@@ -19,10 +19,10 @@
     <div class="col">
         <div class="card h-100">
             @if("sb3" == $student->file_ext)
-                <a href="/teacher/sb3player?postCode={{$student->post_code}}" target="_blank" style="padding: 5px;">
+                <a href="/teacher/sb3player?postCode={{$student->post_code}}&schoolCode={{$schoolCode}}" target="_blank" style="padding: 5px;">
                     <img class="card-img-top" value="{{ $student->posts_id }}" class="img-fluid" src="/posts/{{$schoolCode}}/{{$student->post_code}}_c.{{$student->cover_ext}}" alt=""></a>
             @else
-                <a href="/teacher/imgPreview?postCode={{$student->post_code}}" style="padding: 5px;"><img src="/posts/{{$schoolCode}}/{{$student->post_code}}_c.{{$student->cover_ext}}" class="img-fluid" value="{{ $student->posts_id }}" alt="Card image cap"></a>
+                <a href="/teacher/imgPreview?postCode={{$student->post_code}}&schoolCode={{$schoolCode}}" style="padding: 5px;"><img src="/posts/{{$schoolCode}}/{{$student->post_code}}_c.{{$student->cover_ext}}" class="img-fluid" value="{{ $student->posts_id }}" alt="Card image cap"></a>
             @endif
             <div class="card-footer">
                 <div class="row">

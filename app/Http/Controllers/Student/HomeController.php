@@ -127,6 +127,9 @@ class HomeController extends Controller
     public function getOneLesson(Request $request){
       $id = auth()->guard("student")->id();
       $student = Student::find($id);
+
+      $schoolCode = $this->getSchoolCode();
+
         // $JWTToken = $student->getJWTIdentifier();
       $JWTToken = "";
 
@@ -149,7 +152,7 @@ class HomeController extends Controller
       
       $post = Post::where(['students_id' => $id, 'lesson_logs_id' => $lessonLogsId])->first();
       if ($post) {
-        $lesson->preview_path = "/posts/yuying3/" . $post->post_code . "_c.png";
+        $lesson->preview_path = "/posts/" . $schoolCode . "/" . $post->post_code . "_c.png";
       }
       return $lesson;
     }
@@ -163,6 +166,8 @@ class HomeController extends Controller
       }
 
       $studentsId = Auth::guard("student")->id();
+
+      $schoolCode = $this->getSchoolCode();
       
       // return $this->getSchoolCode();
       // dd($request->get('lesson_logs_id'));
@@ -185,17 +190,20 @@ class HomeController extends Controller
         $uniqid = uniqid();
         // $filename = $originalName . '-' . $uniqid . '.' . $ext;
         $filename = $uniqid . '.' . $ext;
-        $bool = Storage::disk($this->getSchoolCode() . 'posts')->put($filename, file_get_contents($realPath));
+        $bool = Storage::disk($schoolCode . 'posts')->put($filename, file_get_contents($realPath));
 
-        Image::configure(array('driver' => 'imagick')); 
+        Image::configure(array('driver' => 'imagick'));
+
+
+
         if ("mp4" == $ext) {
-          $contents = FFMpeg::fromDisk('yuying3posts')->open($uniqid. ".mp4")->getFrameFromSeconds(0)->export()->getFrameContents();
+          $contents = FFMpeg::fromDisk($schoolCode . 'posts')->open($uniqid. ".mp4")->getFrameFromSeconds(0)->export()->getFrameContents();
           Image::make($contents)
-              ->resize(240, 180)->save(public_path('posts/yuying3/') . $uniqid . '_c.png');
+              ->resize(240, 180)->save(public_path('posts/' . $schoolCode . '/') . $uniqid . '_c.png');
 
         } else {
           Image::make(file_get_contents($realPath))
-              ->resize(240, 180)->save(public_path('posts/yuying3/') . $uniqid . '_c.png');
+              ->resize(240, 180)->save(public_path('posts/' . $schoolCode . '/') . $uniqid . '_c.png');
         }
 
         //TDDO update these new or update code
