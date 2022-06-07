@@ -41,7 +41,7 @@
   </form>
 
   <div id="posts_area">
-
+asas
   </div>
   <div class="card card-default">
     <div class="card-header">
