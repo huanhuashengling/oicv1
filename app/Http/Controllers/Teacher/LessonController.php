@@ -140,6 +140,11 @@ class LessonController extends Controller
         if(strpos($lesson->help_md_doc, "10.115.3.153")) {
           $lesson->help_md_doc = str_replace("10.115.3.153", $_SERVER['HTTP_HOST'], $lesson->help_md_doc);
         }
+
+        if(strpos($lesson->help_md_doc, "10.115.3.3:8080")) {
+            $lesson->help_md_doc = str_replace("10.115.3.3:8080", "kiftd.workc.cc:7002", $lesson->help_md_doc);
+          }
+      
         $lesson->help_md_doc = MarkdownEditor::parse($lesson->help_md_doc);
         return $lesson;
     }
