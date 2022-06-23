@@ -2,7 +2,17 @@
 
 @section('content')
 <div class="container">
+    <input type="hidden" id="requestUrl">
+    <input type="hidden" id="selected_sclass_id">
     <div class="row g-3">
+        <div class="form-group col-md-4">
+            <select name="score_report_clubs_id" class='form-control'>
+                <option>请选择社团</option>
+                @foreach ($clubs as $club)
+                <option value="{{$club->id}}">{{$club['club_title']}}</option>
+                @endforeach
+            </select>
+        </div>
         <div class="form-group col-md-4">
             <select name="score_report_sclasses_id" class='form-control'>
                 <option>请选择班级</option>
@@ -11,6 +21,7 @@
                 @endforeach
             </select>
         </div>
+        
         <div class="form-group col-md-4">
             <select name="score_report_terms_id" class='form-control'>
                 <option>请先选择班级</option>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\Sclass;
+use App\Models\Club;
 use App\Models\LessonLog;
 use App\Models\Student;
 use App\Models\Teacher;
@@ -28,7 +29,8 @@ class ScoreReportController extends Controller
         $userId = auth()->guard('teacher')->id();
         $teacher = Teacher::find($userId);
         $sclasses = Sclass::where(["is_graduated" => 0, "schools_id" => $teacher->schools_id])->get();
-        return view('teacher/scoreReport/index', compact('sclasses'));
+        $clubs = Club::where(["status" => "open", "schools_id" => $teacher->schools_id])->get();
+        return view('teacher/scoreReport/index', compact('sclasses', 'clubs'));
     }
 
     public function getSclassTermsList(Request $request) {
@@ -47,6 +49,113 @@ class ScoreReportController extends Controller
         }
 
         return $resultHtml;
+    }
+
+    public function clubReport(Request $request) {
+        $clubsId = $request->get('sclassesId');
+$term = Term::find(4);
+        $from = date('Y-m-d', strtotime($term->from_date)); 
+        $to = date('Y-m-d', strtotime($term->to_date));
+        $lessonLogs = LessonLog::where("sclasses_id", '=', $clubsId)
+                        ->where("is_club", '=', "true")->get();
+                        // ->whereBetween('lesson_logs.created_at', array($from, $to))->count();
+        $lessonLogCount = count($lessonLogs);
+        $students = Student::select("students.*")
+                    ->leftJoin("club_students", 'club_students.students_id', '=', 'students.id')
+                    ->where("club_students.clubs_id", "=", $clubsId)->where("students.is_lock", "!=", "1")->get();
+
+        // dd($students);
+        // order username postednum unpostnum rate1num rate2num rate3num rate4num commentnum marknum scorecount
+        $dataset = [];
+        foreach ($students as $key => $student) {
+            $tData = [];
+            $tData['users_id'] = $student->id;
+            $tData['email'] = $student->email;
+            $tData['username'] = $student->username;
+            $tData['order_num'] = "-";
+            if ($student->groups_id) {
+                $tGroup = Group::where("id", "=", $student->groups_id)->first();
+                $tData['order_num'] = $tGroup->order_num;
+            }
+
+            $tData['postedNum'] = 0;
+            $tData['markNum'] = 0;
+            $tData['effectMarkNum'] = 0;
+            foreach ($lessonLogs as $num => $lessonLog) {
+                $tPost = Post::where("students_id", '=', $student->id)
+                            // ->where("marks.state_code", "=", 1)
+                            ->where("lesson_logs_id", '=', $lessonLog->id)
+                            // ->groupBy('posts.id')
+                            ->first();
+                // echo($lessonLog->id . ", " . $student->id . ", " . $student->username. '; ');
+
+                if (isset($tPost)) {
+                // echo($tPost->id . ", " . $student->usernme . "; ");
+
+                    $tData['postedNum'] ++;
+                    $tData['markNum'] += $tPost->mark_num;
+                    $tData['effectMarkNum'] += ($tPost->mark_num > 4)?4:$tPost->mark_num; 
+                }
+            }
+            // break;
+
+            // $tData['postedNum'] = Post::leftJoin("lesson_logs", 'lesson_logs.id', '=', 'posts.lesson_logs_id')
+            //                             ->where("posts.students_id", '=', $student->id)
+            //                             ->where("lesson_logs.is_club", '=', "true")
+            //                             ->whereBetween('lesson_logs.created_at', array($from, $to))
+            //                             ->count();
+            // $tData['postedNum'] 
+            // $posts = Post::select('posts.id', DB::raw("SUM(`marks`.`state_code`) as mark_num"))
+            //                 ->leftJoin("marks", 'marks.posts_id', '=', 'posts.id')
+            //                 ->leftJoin("lesson_logs", 'lesson_logs.id', '=', 'posts.lesson_logs_id')
+            //                 ->where("posts.students_id", '=', $student->id)
+            //                 ->where("marks.state_code", "=", 1)
+            //                 ->where("lesson_logs.is_club", '=', "true")
+            //                 ->whereBetween('lesson_logs.created_at', array($from, $to))
+            //                 ->groupBy('posts.id')
+            //                 ->get();
+            // $tData['markNum'] = 0;
+            // $tData['effectMarkNum'] = 0;
+            // foreach ($posts as $key => $post) {
+            //     $tData['markNum'] += $post->mark_num;
+            //     $tData['effectMarkNum'] += ($post->mark_num > 4)?4:$post->mark_num; 
+            // }
+            // dd($posts);
+            $tData['unPostedNum'] = $lessonLogCount - $tData['postedNum'];
+            $tData['commentNum'] = 0;
+            // Comment::leftJoin("posts", 'posts.id', '=', 'comments.posts_id')
+            //                                 ->leftJoin("lesson_logs", 'lesson_logs.id', '=', 'posts.lesson_logs_id')
+            //                                 ->leftJoin("students", 'students.id', '=', 'posts.students_id')
+            //                                 ->where("posts.students_id", '=', $student->id)
+            //                                 ->where("lesson_logs.is_club", '=', "true")
+            //                                 ->whereBetween('lesson_logs.created_at', array($from, $to))
+            //                                 ->count();
+                    
+            $rates = PostRate::leftJoin("posts", 'posts.id', '=', 'post_rates.posts_id')
+                                ->leftJoin("lesson_logs", 'lesson_logs.id', '=', 'posts.lesson_logs_id')
+                                ->leftJoin("students", 'students.id', '=', 'posts.students_id')
+                                ->where("posts.students_id", '=', $student->id)
+                                ->where("lesson_logs.is_club", '=', "true")
+                                ->whereBetween('lesson_logs.created_at', array($from, $to))
+                                ->get();
+            $tData['rateYouJiaNum'] = 0;
+            $tData['rateYouNum'] = 0;
+            $tData['rateDaiWanNum'] = 0;
+            foreach ($rates as $key => $rate) {
+                if (1 == $rate->rate) {
+                    $tData['rateYouJiaNum'] ++;
+                } elseif (2 == $rate->rate) {
+                    $tData['rateYouNum'] ++;
+                } elseif (3 == $rate->rate) {
+                    $tData['rateDaiWanNum'] ++;
+                }
+            }
+            $tData['scoreCount'] = $tData['rateYouNum'] * 8 + $tData['effectMarkNum'] * 0.5 + $tData['rateYouJiaNum'] * 9;
+            $tData['reportText'] = $tData['username'] . "同学本学期到目前为止信息课堂作业共获得：（" . $tData['rateYouJiaNum'] . "个'优＋'x9分） + （" . $tData['rateYouNum']. "个'优'x8分） ＋ （" . $tData['effectMarkNum'] . "个'有效赞'x0.5分） = 总分" . $tData['scoreCount'] . "分; 未交作业".$tData['unPostedNum'] . "个，" . $tData['rateDaiWanNum'] . "个不符合作业要求； 更详细email至：shengling_2005@163.com";
+            $dataset[] = $tData;
+
+        }
+        return $dataset;
     }
 
     public function report(Request $request) {

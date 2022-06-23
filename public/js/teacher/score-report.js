@@ -5,11 +5,23 @@ $(document).ready(function() {
 	  }
 	});
 
+    $("[name='score_report_clubs_id']").on("change", function(e) {
+        var clubsId = $("[name='score_report_clubs_id']").val();
+        
+        $("#requestUrl").val("/teacher/getClubScoreReport");
+        $("#selected_sclass_id").val(clubsId);
+        // alert($("#is_club").val());
+        // alert($("#selected_sclass_id").val());
+        $('#score-report').bootstrapTable("refresh");
+    });
+
 	$("[name='score_report_sclasses_id']").on("change", function(e) {
 		var sclassesId = $("[name='score_report_sclasses_id']").val();
 		if(0 !=  sclassesId) {
 			// alert(sclassesId + " --- " +lessonsId);
 			// $('#score-report').bootstrapTable("refresh");
+            $("#requestUrl").val("/teacher/getScoreReport");
+            $("#selected_sclass_id").val(sclassesId);
 
             $.ajax({
             type: "POST",
@@ -46,7 +58,8 @@ $(document).ready(function() {
 	$('#score-report').bootstrapTable({
         method: 'post', 
         search: "true",
-        url: "/teacher/getScoreReport",
+        url: "/teacher/getClubScoreReport",
+        // url: $("#requestUrl").val(),
         pagination:"true",
         pageList: [50, 30], 
         pageSize: 50,
@@ -56,8 +69,8 @@ $(document).ready(function() {
         showColumns: true, 
         exportDataType: "basic",              //basic', 'all', 'selected'.
     	queryParams: function(params) {
-    		var temp = { 
-                sclassesId : $("[name='score_report_sclasses_id']").val(),
+    		var temp = {
+                sclassesId : $("#selected_sclass_id").val(),
 		        termsId : $("[name='score_report_terms_id']").val(),
 		    };
 		    return temp;
