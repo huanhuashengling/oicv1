@@ -70,12 +70,12 @@
           <li class="nav-item">
             <a class="nav-link {{ request()->segment(2) === 'classmate' ? 'active' : null }}" href="{{ url('/student/classmate?type=same-sclass') }}" tabindex="-1">作业墙</a>
           </li>
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link {{ request()->segment(2) === 'work' ? 'active' : null }}" href="{{ url('/student/work') }}" tabindex="-1">个人主页</a>
           </li>
           <li class="nav-item">
             <a class="nav-link {{ request()->segment(2) === 'open-classroom' ? 'active' : null }}" href="{{ url('/student/open-classroom') }}" tabindex="-1">开放课堂</a>
-          </li> -->
+          </li>
         </ul>
           <ul class="nav navbar-nav navbar-right">
           @if (Auth::guard("student")->guest())

@@ -27,7 +27,7 @@ class OpenClassroomController extends Controller
 
     public function course(Request $request)
     {   
-        $coursesId = Route::current()->getParameter('id');
+        $coursesId = Route::current()->parameter('id');
         $id = \Auth::guard("student")->id();
         $course = Course::find($coursesId);
         $units = Unit::where("courses_id", "=", $coursesId)
@@ -38,7 +38,7 @@ class OpenClassroomController extends Controller
 
     public function unit(Request $request)
     {
-        $unitsId = Route::current()->getParameter('id');
+        $unitsId = Route::current()->parameter('id');
 
         $id = \Auth::guard("student")->id();
         $unit = Unit::find($unitsId);
@@ -51,14 +51,25 @@ class OpenClassroomController extends Controller
 
     public function lesson(Request $request)
     {
-        $lessonsId = Route::current()->getParameter('id');
+        $lessonsId = Route::current()->parameter('id');
 
         $id = \Auth::guard("student")->id();
         $lesson = Lesson::find($lessonsId);
         $unit = Unit::find($lesson->units_id);
         $unit->course = Course::find($unit->courses_id);
         $lesson->unit = $unit;
-        $lesson->help_md_doc = EndaEditor::MarkDecode($lesson->help_md_doc);
+        $planetUrl = url("images/planet.png");
+        if(strpos($lesson->help_md_doc, "10.115.3.153")) {
+        $lesson->help_md_doc = str_replace("10.115.3.153", $_SERVER['HTTP_HOST'], $lesson->help_md_doc);
+      }
+
+      if("10.115.3.153" != $_SERVER['HTTP_HOST']) {
+        if(strpos($lesson->help_md_doc, "10.115.3.3:8080")) {
+          $lesson->help_md_doc = str_replace("10.115.3.3:8080", "kiftd.workc.cc:7002", $lesson->help_md_doc);
+        }
+      }
+      
+        $lesson->help_md_doc = MarkdownEditor::parse($lesson->help_md_doc);
         return view('student/open-classroom/lesson', compact('lesson', 'planetUrl'));
     }
 }
