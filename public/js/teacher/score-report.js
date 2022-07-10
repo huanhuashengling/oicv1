@@ -58,7 +58,7 @@ $(document).ready(function() {
 	$('#score-report').bootstrapTable({
         method: 'post', 
         search: "true",
-        url: "/teacher/getClubScoreReport",
+        url: "/teacher/getScoreReport",
         // url: $("#requestUrl").val(),
         pagination:"true",
         pageList: [50, 30], 
