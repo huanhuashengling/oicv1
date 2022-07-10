@@ -57,9 +57,14 @@ class WorkController extends Controller
         
         $work = new Work;
         $work->title = $request->get('title');
+        $work->work_name = $request->get('title');
+        $work->cover_name = $request->get('title');
         $work->description = $request->get('description');
         $work->work_idea = $request->get('work_idea');
         $work->students_id = $studentsId;
+        $work->mime_type = "";
+        $work->file_ext = "";
+        $work->work_code = "";
         $work->updated_num = 1;
         $work->is_open = 2;
         $work->order_num = $tWorkNum + 1;
@@ -90,10 +95,15 @@ class WorkController extends Controller
         $isOpen = ("on" == $request->get('is_open'))?1:2;
         $work = Work::find($id);
         $work->title = $request->get('title');
+        $work->work_name = $request->get('title');
+        $work->cover_name = $request->get('title');
         $work->description = $request->get('description');
         $work->work_idea = $request->get('work_idea');
         $work->updated_num = $work->updated_num + 1;
         $work->is_open = $isOpen;
+        $work->mime_type = "";
+        $work->file_ext = "";
+        $work->work_code = "";
         $work->order_num = $request->get('order_num');
 
         if ($work->update()) {

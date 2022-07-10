@@ -54,10 +54,11 @@
         <h4 class="modal-title" id="">上传作品封面</h4>
       </div>
       <div class="modal-body">
-        {!! Form::open(array('url'=>'student/upload-cover','method'=>'POST', 'files'=>true)) !!}
-          <input type="hidden" name="works_id" value="">
-          {!! Form::file('cover-source', ['id' => 'cover-upload']) !!}
-        {!! Form::close() !!}
+        <form role="form" method='POST' files=true>
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="works_id" value="">
+            <input type="file" class="form-control" name="cover-source" id="cover-upload">
+        </form>
       </div>
     </div>
   </div>
@@ -71,10 +72,11 @@
         <h4 class="modal-title" id="">上传作品文件</h4>
       </div>
       <div class="modal-body">
-        {!! Form::open(array('url'=>'student/upload-work','method'=>'POST', 'files'=>true)) !!}
-          <input type="hidden" name="works_id" value="">
-          {!! Form::file('work-source', ['id' => 'work-upload']) !!}
-        {!! Form::close() !!}
+        <form role="form" method='POST' files=true>
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="works_id" value="">
+            <input type="file" class="form-control" name="work-source" id="work-upload">
+        </form>
       </div>
     </div>
   </div>

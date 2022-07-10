@@ -17,6 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/space', 'SpaceController@index');
+Route::get('/work', 'SpaceController@work');
+Route::post('/add-work-comment', 'SpaceController@addWorkComment');
+Route::post('/list-work-comment', 'SpaceController@listWorkComment');
+
 Route::group(['prefix' => 'teacher','namespace' => 'Teacher'],function ($router)
 {
     $router->get('login', 'LoginController@showLoginForm')->name('teacher.login');
