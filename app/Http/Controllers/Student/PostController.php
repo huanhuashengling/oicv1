@@ -35,7 +35,7 @@ class PostController extends Controller
 
     public function getPostsByTerm(Request $request) {
         $termsId = $request->get('termsId');
-        // dd($termsId);
+        dd($termsId);
         $term = Term::find($termsId);
         $middir = "/posts/" . $this->getSchoolCode() . "/";
         $imgTypes = ['jpg', 'jpeg', 'bmp', 'gif', 'png'];

@@ -138,7 +138,7 @@ class HomeController extends Controller
 
       $lessonsId = $request->get('lessons_id');
       $lessonLogsId = $request->get('lesson_logs_id');
-
+      dd($lessonsId);
       $lesson = Lesson::where(['id' => $lessonsId])->first();
 
       if ("sb3" == $lesson->allow_post_file_types) {
