@@ -225,8 +225,8 @@ class pinyinfirstchar
         // return $this->getInitials($fitstLetter);
         // return substr($this->getInitials($str), 0, 1);
         if(empty($str)){return '';}
-        $fchar=ord($str{0});
-        if($fchar>=ord('A')&&$fchar<=ord('z')) return strtoupper($str{0});
+        $fchar=ord($str[0]);
+        if($fchar>=ord('A')&&$fchar<=ord('z')) return strtoupper($str[0]);
         $s1=iconv('UTF-8','gb2312//IGNORE',$str);
         $s2=iconv('gb2312','UTF-8',$s1);
         $s=$s2==$str?$s1:$str;
