@@ -50,7 +50,7 @@ class HomeController extends Controller
 
         $chooseLessonsId = $request->session()->get('chooseLessonsId');
 
-        $sclasses = Sclass::where(["is_graduated" => 0, "schools_id" => $teacher->schools_id])->get();
+        $sclasses = Sclass::where(["is_graduated" => 0, "schools_id" => $teacher->schools_id])->orderBy("enter_school_year", "DESC")->get();
         $classData = [];
         foreach ($sclasses as $key => $sclass) {
             $term = Term::where(['enter_school_year' => $sclass['enter_school_year'], 'is_current' => 1])->first();
