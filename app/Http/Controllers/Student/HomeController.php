@@ -213,9 +213,9 @@ class HomeController extends Controller
 
         } else {
           // dd(base64_decode(file_get_contents($realPath)));
-          dd($realPath);
+          // dd($realPath);
           // Image::make(file_get_contents($realPath))
-          Image::make(base64_decode(file_get_contents($realPath)))
+          Image::make(file_get_contents($realPath))
               ->resize(240, 180)->save(public_path('posts/' . $schoolCode . '/') . $uniqid . '_c.png');
         }
 
