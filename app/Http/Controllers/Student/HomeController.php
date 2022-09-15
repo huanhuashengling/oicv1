@@ -212,10 +212,10 @@ class HomeController extends Controller
               ->resize(240, 180)->save(public_path('posts/' . $schoolCode . '/') . $uniqid . '_c.png');
 
         } else {
-          // dd(gettype(file_get_contents($realPath)));
+          dd(base64_decode(file_get_contents($realPath)));
           // dd($realPath);base64_decode
           // Image::make(file_get_contents($realPath))
-          Image::make(file_get_contents($file))
+          Image::make(base64_decode(file_get_contents($realPath)))
               ->resize(240, 180)->save(public_path('posts/' . $schoolCode . '/') . $uniqid . '_c.png');
         }
 
