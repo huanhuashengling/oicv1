@@ -104,8 +104,9 @@ class LessonLogController extends Controller
 
         $clubData = Club::select("id", "club_title as class_title", "term_desc")
         ->where(["schools_id" => $teacher->schools_id])->get();
-
-        $terms = Term::where(["is_current" => 1])->orderBy("enter_school_year", "desc")->get();
+        //TODO
+        // $terms = Term::where(["is_current" => 1])->orderBy("enter_school_year", "desc")->get();
+        $terms = Term::orderBy("enter_school_year", "desc")->get();
         return view('teacher/lesson/lesson-log', compact('clubData', 'terms'));
     }
 
@@ -131,10 +132,12 @@ class LessonLogController extends Controller
             $matchThese = ["lesson_logs.is_club" => "false"];
 
         } else {
-            $sclass = Club::where(['status' => 'open'])->find($request->get('clubsId'));
+            //TODO
+            // $sclass = Club::where(['status' => 'open'])->find($request->get('clubsId'));
+            $sclass = Club::find($request->get('clubsId'));
             $matchThese = ["lesson_logs.is_club" => "true"];
         }
-        
+
         $lessonLogs = LessonLog::select('lesson_logs.id', 'lessons.title', 'lessons.subtitle', 'teachers.username', 'lesson_logs.updated_at', DB::raw("COUNT(`posts`.`id`) as post_num"))
             ->leftJoin('lessons', function($join){
               $join->on('lessons.id', '=', 'lesson_logs.lessons_id');
@@ -157,7 +160,6 @@ class LessonLogController extends Controller
     public function getPostDataByTermAndSclass(Request $request)
     {
         $lessonLog = LessonLog::find($request->get('lessonlogsId'));
-        // dd($lessonLog);die();
 
         $students = DB::table('students')->select('students.id', 'students.username', 'posts.file_ext','posts.cover_ext', 'posts.export_name', 'posts.post_code', 'post_rates.rate', 'posts.id as posts_id', DB::raw("COUNT(`marks`.`id`) as mark_num"))
         ->leftJoin('posts', 'posts.students_id', '=', 'students.id')
@@ -168,7 +170,7 @@ class LessonLogController extends Controller
         ->where('students.is_lock', "!=", "1")
         ->groupBy('students.id', 'students.username', 'posts.export_name', 'post_rates.rate','posts.cover_ext', 'posts.post_code', 'posts.id')
         ->orderBy(DB::raw('convert(students.username using gbk)'), "ASC")->get();
-        // dd($lessonLog);
+        
         $unPostStudentNameStr = "未交名单:";
         
         $postedStudents = [];
