@@ -133,8 +133,8 @@ class LessonLogController extends Controller
 
         } else {
             //TODO
-            // $sclass = Club::where(['status' => 'open'])->find($request->get('clubsId'));
-            $sclass = Club::find($request->get('clubsId'));
+            $sclass = Club::where(['status' => 'open'])->find($request->get('clubsId'));
+            // $sclass = Club::find($request->get('clubsId'));
             $matchThese = ["lesson_logs.is_club" => "true"];
         }
 
