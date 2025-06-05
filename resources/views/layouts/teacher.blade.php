@@ -20,7 +20,6 @@
     <script src="/js/bootstrap.min.js"></script>
 
     <script src="/js/respond.min.js"></script>
-
     <script src="/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
     <script src="/js/plugins/sortable.min.js" type="text/javascript"></script>
     <script src="/js/plugins/purify.min.js" type="text/javascript"></script>
@@ -71,6 +70,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link {{ request()->segment(2) === 'scoreReport' ? 'active' : null }}" href="/teacher/scoreReport" tabindex="-1">成绩报告</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ request()->segment(2) === 'detailReport' ? 'active' : null }}" href="/teacher/detailReport" tabindex="-1">详细报告</a>
           </li>
         </ul>
       

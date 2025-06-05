@@ -67,6 +67,8 @@ Route::group(['middleware' => 'auth.teacher', 'prefix' => 'teacher','namespace' 
     $router->post('getSclassTermsList', 'ScoreReportController@getSclassTermsList');
     $router->post('email-out', 'ScoreReportController@emailOut');
 
+    $router->get('detailReport', 'DetailReportController@index');
+    $router->post('getDetailReport', 'DetailReportController@report');
 
     $router->get('get-lesson-list', 'LessonController@getLessonList');
     $router->post('deleteLesson', 'LessonController@deleteLesson');
