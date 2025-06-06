@@ -14,18 +14,20 @@
 
     <link href="/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
     <link href="/css/bootstrap-table.min.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="/css/bootstrap-table-fixed-columns.min.css" media="all" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="/css/editormd.preview.min.css" />
     <link href="/css/jquery-ui.css" rel="stylesheet">
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
 
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <script src="/js/respond.min.js"></script>
     <script src="/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
     <script src="/js/plugins/sortable.min.js" type="text/javascript"></script>
     <script src="/js/plugins/purify.min.js" type="text/javascript"></script>
     <script src="/js/fileinput.min.js"></script>
     <script src="/js/bootstrap-table.min.js"></script>
-    
+    <script src="/js/bootstrap-table-fixed-columns.min.js"></script>
 
     <script src="/js/locales/zh.js"></script>
     

@@ -66,6 +66,7 @@ $(document).ready(function() {
                     formatter: function (value, row, index) {  
                         return index+1;
                     },
+                    sortable: true
                 },{
                     field: 'username',
                     title: '学生姓名',
@@ -121,7 +122,10 @@ $(document).ready(function() {
 
             return res;
         },
-        
+        // 启用 fixedColumns 插件
+        fixedColumns: true,
+        // 指定要冻结的列数（不包括 checkbox 列）
+        fixedNumber: 3
         
     });
 	
