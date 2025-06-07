@@ -92,6 +92,7 @@ $(document).ready(function() {
                                     // 获取当前行对应作业的状态
                                     let currentLesson = currentRow.lessonLogs && currentRow.lessonLogs[index];
                                     let status = currentLesson ? currentLesson.status : null;
+                                    let statusNew = currentLesson ? currentLesson.status_new : 0; // 获取 status_new 值，默认为 0
                                     let color = '';
                                     switch (status) {
                                         case "优+":
@@ -106,7 +107,12 @@ $(document).ready(function() {
                                         default:
                                             color = 'black';
                                     }
-                                    return `<span style="color: ${color}">${status ? status : '未交'}</span>`;
+                                    let statusText = `<span style="color: ${color}">${status ? status : '未交'}</span>`;
+                                    // 如果 status_new 为 1，添加 new 图标
+                                    if (statusNew === 1) {
+                                        statusText += ' <i class="bi bi-tag-fill text-warning"></i>';
+                                    }
+                                    return statusText;
                                 }
                             });
                         }

@@ -76,7 +76,18 @@ class DetailReportController extends Controller
                                         WHEN post_rates.rate = 2 THEN '优' 
                                         ELSE 3 
                                     END AS status"),
-                                    'lesson_logs.created_at AS lesson_time'
+                                    'lesson_logs.created_at AS lesson_time',
+                                    'lesson_logs.created_at AS lesson_time',
+                                    // 新增字段：检查是否在近24小时内有更新
+                                    DB::raw("CASE 
+                                        WHEN EXISTS (
+                                            SELECT 1 FROM posts 
+                                            WHERE posts.lesson_logs_id = lesson_logs.id 
+                                            AND posts.students_id = {$student->id} 
+                                            AND posts.updated_at >= DATE_SUB(NOW(), INTERVAL 124 HOUR)
+                                        ) THEN 1 
+                                        ELSE 0 
+                                    END AS status_new")
                                 ])
                                 ->leftJoin('lessons', 'lesson_logs.lessons_id', '=', 'lessons.id')
                                 ->leftJoin('sclasses', 'lesson_logs.sclasses_id', '=', 'sclasses.id') // 课程日志班级与班级表关联
